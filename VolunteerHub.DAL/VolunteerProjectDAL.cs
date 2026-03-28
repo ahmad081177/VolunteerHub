@@ -36,9 +36,9 @@ namespace VolunteerHub.DAL
             using (var conn = DbHelper.GetConnection())
             using (var cmd  = new OleDbCommand(sql, conn))
             {
-                cmd.Parameters.AddWithValue("@u", userId);
-                cmd.Parameters.AddWithValue("@p", projectId);
-                cmd.Parameters.AddWithValue("@e", DateTime.UtcNow);
+                cmd.Parameters.Add("@u", OleDbType.Integer).Value = userId;
+                cmd.Parameters.Add("@p", OleDbType.Integer).Value = projectId;
+                cmd.Parameters.Add("@e", OleDbType.DBDate).Value  = DateTime.UtcNow;
                 cmd.ExecuteNonQuery();
             }
         }

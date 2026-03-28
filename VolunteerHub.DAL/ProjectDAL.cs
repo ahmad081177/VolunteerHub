@@ -32,15 +32,17 @@ namespace VolunteerHub.DAL
             using (var conn = DbHelper.GetConnection())
             using (var cmd  = new OleDbCommand(sql, conn))
             {
-                cmd.Parameters.AddWithValue("@wi", p.WorkspaceId);
-                cmd.Parameters.AddWithValue("@ti", p.Title);
-                cmd.Parameters.AddWithValue("@dc", (object)p.Description  ?? DBNull.Value);
-                cmd.Parameters.AddWithValue("@lc", (object)p.Location     ?? DBNull.Value);
-                cmd.Parameters.AddWithValue("@sd", p.StartDate);
-                cmd.Parameters.AddWithValue("@ed", p.EndDate);
-                cmd.Parameters.AddWithValue("@mv", (object)p.MaxVolunteers  ?? DBNull.Value);
-                cmd.Parameters.AddWithValue("@hr", (object)p.HoursRequired  ?? DBNull.Value);
-                cmd.Parameters.AddWithValue("@ca", p.CreatedAt);
+                cmd.Parameters.Add("@wi", OleDbType.Integer).Value    = p.WorkspaceId;
+                cmd.Parameters.Add("@ti", OleDbType.VarChar).Value    = p.Title;
+                cmd.Parameters.Add("@dc", OleDbType.LongVarChar).Value = (object)p.Description ?? DBNull.Value;
+                cmd.Parameters.Add("@lc", OleDbType.VarChar).Value    = (object)p.Location     ?? DBNull.Value;
+                cmd.Parameters.Add("@sd", OleDbType.DBDate).Value     = p.StartDate;
+                cmd.Parameters.Add("@ed", OleDbType.DBDate).Value     = p.EndDate;
+                var mvP = cmd.Parameters.Add("@mv", OleDbType.Integer);
+                mvP.Value = p.MaxVolunteers.HasValue ? (object)p.MaxVolunteers.Value : DBNull.Value;
+                var hrP = cmd.Parameters.Add("@hr", OleDbType.Double);
+                hrP.Value = p.HoursRequired.HasValue ? (object)(double)p.HoursRequired.Value : DBNull.Value;
+                cmd.Parameters.Add("@ca", OleDbType.DBDate).Value     = p.CreatedAt;
                 cmd.ExecuteNonQuery();
                 // @@IDENTITY returns the AutoNumber value Access assigned to the newly inserted row.
                 cmd.CommandText = "SELECT @@IDENTITY";
@@ -85,15 +87,17 @@ namespace VolunteerHub.DAL
             using (var conn = DbHelper.GetConnection())
             using (var cmd  = new OleDbCommand(sql, conn))
             {
-                cmd.Parameters.AddWithValue("@ti", p.Title);
-                cmd.Parameters.AddWithValue("@dc", (object)p.Description  ?? DBNull.Value);
-                cmd.Parameters.AddWithValue("@lc", (object)p.Location     ?? DBNull.Value);
-                cmd.Parameters.AddWithValue("@sd", p.StartDate);
-                cmd.Parameters.AddWithValue("@ed", p.EndDate);
-                cmd.Parameters.AddWithValue("@mv", (object)p.MaxVolunteers  ?? DBNull.Value);
-                cmd.Parameters.AddWithValue("@hr", (object)p.HoursRequired  ?? DBNull.Value);
-                cmd.Parameters.AddWithValue("@id", p.Id);
-                cmd.Parameters.AddWithValue("@wi", p.WorkspaceId);
+                cmd.Parameters.Add("@ti", OleDbType.VarChar).Value    = p.Title;
+                cmd.Parameters.Add("@dc", OleDbType.LongVarChar).Value = (object)p.Description ?? DBNull.Value;
+                cmd.Parameters.Add("@lc", OleDbType.VarChar).Value    = (object)p.Location     ?? DBNull.Value;
+                cmd.Parameters.Add("@sd", OleDbType.DBDate).Value     = p.StartDate;
+                cmd.Parameters.Add("@ed", OleDbType.DBDate).Value     = p.EndDate;
+                var mvPu = cmd.Parameters.Add("@mv", OleDbType.Integer);
+                mvPu.Value = p.MaxVolunteers.HasValue ? (object)p.MaxVolunteers.Value : DBNull.Value;
+                var hrPu = cmd.Parameters.Add("@hr", OleDbType.Double);
+                hrPu.Value = p.HoursRequired.HasValue ? (object)(double)p.HoursRequired.Value : DBNull.Value;
+                cmd.Parameters.Add("@id", OleDbType.Integer).Value    = p.Id;
+                cmd.Parameters.Add("@wi", OleDbType.Integer).Value    = p.WorkspaceId;
                 cmd.ExecuteNonQuery();
             }
         }

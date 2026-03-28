@@ -44,14 +44,14 @@ namespace VolunteerHub.DAL
             using (var conn = DbHelper.GetConnection())
             using (var cmd  = new OleDbCommand(sql, conn))
             {
-                cmd.Parameters.AddWithValue("@uid", e.UserId);
-                cmd.Parameters.AddWithValue("@pid", e.ProjectId);
-                cmd.Parameters.AddWithValue("@ed",  e.EventDate);
-                cmd.Parameters.AddWithValue("@st",  (object)e.StartTime ?? DBNull.Value);
-                cmd.Parameters.AddWithValue("@et",  (object)e.EndTime   ?? DBNull.Value);
-                cmd.Parameters.AddWithValue("@hl",  e.HoursLogged);
-                cmd.Parameters.AddWithValue("@nt",  (object)e.Notes     ?? DBNull.Value);
-                cmd.Parameters.AddWithValue("@la",  e.LoggedAt);
+                cmd.Parameters.Add("@uid", OleDbType.Integer).Value   = e.UserId;
+                cmd.Parameters.Add("@pid", OleDbType.Integer).Value   = e.ProjectId;
+                cmd.Parameters.Add("@ed",  OleDbType.DBDate).Value    = e.EventDate;
+                cmd.Parameters.Add("@st",  OleDbType.VarChar).Value   = (object)e.StartTime ?? DBNull.Value;
+                cmd.Parameters.Add("@et",  OleDbType.VarChar).Value   = (object)e.EndTime   ?? DBNull.Value;
+                cmd.Parameters.Add("@hl",  OleDbType.Double).Value    = (double)e.HoursLogged;
+                cmd.Parameters.Add("@nt",  OleDbType.LongVarChar).Value = (object)e.Notes   ?? DBNull.Value;
+                cmd.Parameters.Add("@la",  OleDbType.DBDate).Value    = e.LoggedAt;
                 cmd.ExecuteNonQuery();
                 cmd.CommandText = "SELECT @@IDENTITY";
                 return Convert.ToInt32(cmd.ExecuteScalar());
@@ -136,8 +136,8 @@ namespace VolunteerHub.DAL
             using (var conn = DbHelper.GetConnection())
             using (var cmd  = new OleDbCommand(sql, conn))
             {
-                cmd.Parameters.AddWithValue("@u", userId);
-                cmd.Parameters.AddWithValue("@d", cutoff);
+                cmd.Parameters.Add("@u", OleDbType.Integer).Value = userId;
+                cmd.Parameters.Add("@d", OleDbType.DBDate).Value   = cutoff;
                 using (var r = cmd.ExecuteReader())
                     while (r.Read())
                     {
@@ -159,13 +159,13 @@ namespace VolunteerHub.DAL
             using (var conn = DbHelper.GetConnection())
             using (var cmd  = new OleDbCommand(sql, conn))
             {
-                cmd.Parameters.AddWithValue("@ed",  e.EventDate);
-                cmd.Parameters.AddWithValue("@st",  (object)e.StartTime ?? DBNull.Value);
-                cmd.Parameters.AddWithValue("@et",  (object)e.EndTime   ?? DBNull.Value);
-                cmd.Parameters.AddWithValue("@hl",  e.HoursLogged);
-                cmd.Parameters.AddWithValue("@nt",  (object)e.Notes     ?? DBNull.Value);
-                cmd.Parameters.AddWithValue("@id",  e.Id);
-                cmd.Parameters.AddWithValue("@uid", e.UserId);
+                cmd.Parameters.Add("@ed",  OleDbType.DBDate).Value    = e.EventDate;
+                cmd.Parameters.Add("@st",  OleDbType.VarChar).Value   = (object)e.StartTime ?? DBNull.Value;
+                cmd.Parameters.Add("@et",  OleDbType.VarChar).Value   = (object)e.EndTime   ?? DBNull.Value;
+                cmd.Parameters.Add("@hl",  OleDbType.Double).Value    = (double)e.HoursLogged;
+                cmd.Parameters.Add("@nt",  OleDbType.LongVarChar).Value = (object)e.Notes   ?? DBNull.Value;
+                cmd.Parameters.Add("@id",  OleDbType.Integer).Value   = e.Id;
+                cmd.Parameters.Add("@uid", OleDbType.Integer).Value   = e.UserId;
                 cmd.ExecuteNonQuery();
             }
         }

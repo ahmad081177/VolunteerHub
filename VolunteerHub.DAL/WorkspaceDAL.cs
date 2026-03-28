@@ -37,11 +37,11 @@ namespace VolunteerHub.DAL
             using (var conn = DbHelper.GetConnection())
             using (var cmd  = new OleDbCommand(sql, conn))
             {
-                cmd.Parameters.AddWithValue("@n",  w.Name);
-                cmd.Parameters.AddWithValue("@c",  w.Code);
-                cmd.Parameters.AddWithValue("@lp", (object)w.LogoPath ?? DBNull.Value);
-                cmd.Parameters.AddWithValue("@a",  w.IsActive);
-                cmd.Parameters.AddWithValue("@ca", w.CreatedAt);
+                cmd.Parameters.Add("@n",  OleDbType.VarChar).Value = w.Name;
+                cmd.Parameters.Add("@c",  OleDbType.VarChar).Value = w.Code;
+                cmd.Parameters.Add("@lp", OleDbType.VarChar).Value = (object)w.LogoPath ?? DBNull.Value;
+                cmd.Parameters.Add("@a",  OleDbType.Boolean).Value = w.IsActive;
+                cmd.Parameters.Add("@ca", OleDbType.DBDate).Value  = w.CreatedAt;
                 cmd.ExecuteNonQuery();
                 cmd.CommandText = "SELECT @@IDENTITY";
                 return Convert.ToInt32(cmd.ExecuteScalar());
@@ -77,11 +77,11 @@ namespace VolunteerHub.DAL
             using (var conn = DbHelper.GetConnection())
             using (var cmd  = new OleDbCommand(sql, conn))
             {
-                cmd.Parameters.AddWithValue("@n",  w.Name);
-                cmd.Parameters.AddWithValue("@c",  w.Code);
-                cmd.Parameters.AddWithValue("@lp", (object)w.LogoPath ?? DBNull.Value);
-                cmd.Parameters.AddWithValue("@a",  w.IsActive);
-                cmd.Parameters.AddWithValue("@id", w.Id);
+                cmd.Parameters.Add("@n",  OleDbType.VarChar).Value  = w.Name;
+                cmd.Parameters.Add("@c",  OleDbType.VarChar).Value  = w.Code;
+                cmd.Parameters.Add("@lp", OleDbType.VarChar).Value  = (object)w.LogoPath ?? DBNull.Value;
+                cmd.Parameters.Add("@a",  OleDbType.Boolean).Value  = w.IsActive;
+                cmd.Parameters.Add("@id", OleDbType.Integer).Value  = w.Id;
                 cmd.ExecuteNonQuery();
             }
         }

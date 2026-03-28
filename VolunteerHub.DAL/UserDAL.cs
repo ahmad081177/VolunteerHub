@@ -54,21 +54,23 @@ namespace VolunteerHub.DAL
             using (var conn = DbHelper.GetConnection())
             using (var cmd  = new OleDbCommand(sql, conn))
             {
-                cmd.Parameters.AddWithValue("@fn",  u.FirstName);
-                cmd.Parameters.AddWithValue("@ln",  u.LastName);
-                cmd.Parameters.AddWithValue("@em",  u.Email);
-                cmd.Parameters.AddWithValue("@ph",  u.PasswordHash);
-                cmd.Parameters.AddWithValue("@gn",  u.IsMale);
-                // Nullable C# values must be wrapped as (object)x ?? DBNull.Value.
-                // Passing a plain null to OleDb throws an InvalidCastException.
-                cmd.Parameters.AddWithValue("@db",  (object)u.DateOfBirth  ?? DBNull.Value);
-                cmd.Parameters.AddWithValue("@pn",  (object)u.Phone        ?? DBNull.Value);
-                cmd.Parameters.AddWithValue("@ad",  (object)u.Address      ?? DBNull.Value);
-                cmd.Parameters.AddWithValue("@ip",  (object)u.ImageProfilePath ?? DBNull.Value);
-                cmd.Parameters.AddWithValue("@rl",  u.Role);
-                cmd.Parameters.AddWithValue("@wi",  (object)u.WorkspaceId  ?? DBNull.Value);
-                cmd.Parameters.AddWithValue("@ac",  u.IsActive);
-                cmd.Parameters.AddWithValue("@ca",  u.CreatedAt);
+                // Use explicit OleDbType — AddWithValue mis-infers Access YESNO (bool)
+                // and DATETIME on some driver versions, causing "Data type mismatch".
+                cmd.Parameters.Add("@fn",  OleDbType.VarChar).Value = u.FirstName;
+                cmd.Parameters.Add("@ln",  OleDbType.VarChar).Value = u.LastName;
+                cmd.Parameters.Add("@em",  OleDbType.VarChar).Value = u.Email;
+                cmd.Parameters.Add("@ph",  OleDbType.VarChar).Value = u.PasswordHash;
+                cmd.Parameters.Add("@gn",  OleDbType.Boolean).Value = u.IsMale;
+                var dbParam = cmd.Parameters.Add("@db", OleDbType.DBDate);
+                dbParam.Value = u.DateOfBirth.HasValue ? (object)u.DateOfBirth.Value : DBNull.Value;
+                cmd.Parameters.Add("@pn",  OleDbType.VarChar).Value = (object)u.Phone   ?? DBNull.Value;
+                cmd.Parameters.Add("@ad",  OleDbType.LongVarChar).Value = (object)u.Address ?? DBNull.Value;
+                cmd.Parameters.Add("@ip",  OleDbType.VarChar).Value = (object)u.ImageProfilePath ?? DBNull.Value;
+                cmd.Parameters.Add("@rl",  OleDbType.VarChar).Value = u.Role;
+                var wiParam = cmd.Parameters.Add("@wi", OleDbType.Integer);
+                wiParam.Value = u.WorkspaceId.HasValue ? (object)u.WorkspaceId.Value : DBNull.Value;
+                cmd.Parameters.Add("@ac",  OleDbType.Boolean).Value = u.IsActive;
+                cmd.Parameters.Add("@ca",  OleDbType.DBDate).Value  = u.CreatedAt;
                 cmd.ExecuteNonQuery();
                 // @@IDENTITY returns the AutoNumber value Access assigned to the newly inserted row.
                 cmd.CommandText = "SELECT @@IDENTITY";
@@ -145,8 +147,8 @@ namespace VolunteerHub.DAL
             using (var conn = DbHelper.GetConnection())
             using (var cmd  = new OleDbCommand(sql, conn))
             {
-                cmd.Parameters.AddWithValue("@ll", DateTime.UtcNow);
-                cmd.Parameters.AddWithValue("@id", id);
+                cmd.Parameters.Add("@ll", OleDbType.DBDate).Value  = DateTime.UtcNow;
+                cmd.Parameters.Add("@id", OleDbType.Integer).Value = id;
                 cmd.ExecuteNonQuery();
             }
         }
@@ -157,9 +159,9 @@ namespace VolunteerHub.DAL
             using (var conn = DbHelper.GetConnection())
             using (var cmd  = new OleDbCommand(sql, conn))
             {
-                cmd.Parameters.AddWithValue("@t",  token);
-                cmd.Parameters.AddWithValue("@ex", expiry);
-                cmd.Parameters.AddWithValue("@id", id);
+                cmd.Parameters.Add("@t",  OleDbType.VarChar).Value = token;
+                cmd.Parameters.Add("@ex", OleDbType.DBDate).Value  = expiry;
+                cmd.Parameters.Add("@id", OleDbType.Integer).Value = id;
                 cmd.ExecuteNonQuery();
             }
         }
@@ -183,8 +185,8 @@ namespace VolunteerHub.DAL
             using (var conn = DbHelper.GetConnection())
             using (var cmd  = new OleDbCommand(sql, conn))
             {
-                cmd.Parameters.AddWithValue("@a",  active);
-                cmd.Parameters.AddWithValue("@id", id);
+                cmd.Parameters.Add("@a",  OleDbType.Boolean).Value = active;
+                cmd.Parameters.Add("@id", OleDbType.Integer).Value = id;
                 cmd.ExecuteNonQuery();
             }
         }

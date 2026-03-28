@@ -65,7 +65,7 @@ namespace VolunteerHub.DAL
                     DateOfBirth            DATETIME,
                     Phone                  TEXT(20),
                     Address                MEMO,
-                    ImageProfilePath       TEXT(500),
+                    ImageProfilePath       TEXT(255),
                     Role                   TEXT(20) NOT NULL,
                     WorkspaceId            LONG,
                     IsActive               YESNO NOT NULL,
@@ -89,7 +89,7 @@ namespace VolunteerHub.DAL
                     Id        COUNTER CONSTRAINT PK_Workspaces PRIMARY KEY,
                     Name      TEXT(200) NOT NULL,
                     Code      TEXT(50)  NOT NULL,
-                    LogoPath  TEXT(500),
+                    LogoPath  TEXT(255),
                     IsActive  YESNO     NOT NULL,
                     CreatedAt DATETIME  NOT NULL
                 )");
@@ -173,14 +173,17 @@ namespace VolunteerHub.DAL
                 VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
             using (var cmd = new OleDbCommand(sql, conn))
             {
-                cmd.Parameters.AddWithValue("@fn",  "Super");
-                cmd.Parameters.AddWithValue("@ln",  "Admin");
-                cmd.Parameters.AddWithValue("@em",  "admin@volunteerhub.local");
-                cmd.Parameters.AddWithValue("@ph",  hash);
-                cmd.Parameters.AddWithValue("@gen", true);
-                cmd.Parameters.AddWithValue("@rl",  "SuperAdmin");
-                cmd.Parameters.AddWithValue("@ac",  true);
-                cmd.Parameters.AddWithValue("@ca",  DateTime.UtcNow);
+                // Use explicit OleDbType for every parameter.
+                // AddWithValue can mis-infer the type for Access YESNO (bool) and DATETIME,
+                // causing "Data type mismatch in criteria expression" at runtime.
+                cmd.Parameters.Add("@fn",  OleDbType.VarChar).Value   = "Super";
+                cmd.Parameters.Add("@ln",  OleDbType.VarChar).Value   = "Admin";
+                cmd.Parameters.Add("@em",  OleDbType.VarChar).Value   = "admin@volunteerhub.local";
+                cmd.Parameters.Add("@ph",  OleDbType.VarChar).Value   = hash;
+                cmd.Parameters.Add("@gen", OleDbType.Boolean).Value   = true;
+                cmd.Parameters.Add("@rl",  OleDbType.VarChar).Value   = "SuperAdmin";
+                cmd.Parameters.Add("@ac",  OleDbType.Boolean).Value   = true;
+                cmd.Parameters.Add("@ca",  OleDbType.DBDate).Value    = DateTime.UtcNow;
                 cmd.ExecuteNonQuery();
             }
         }
