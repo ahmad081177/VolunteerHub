@@ -12,10 +12,17 @@ namespace VolunteerHub.Pages.Admin
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl profileAvatar;
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl profileName;
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl profileEmail;
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl profileJoined;
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl profileStatus;
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl statTotalHours;
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl statProjects;
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl statEvents;
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl statCompleted;
+        protected global::System.Web.UI.WebControls.Panel pnlChart;
+        protected global::System.Web.UI.WebControls.Panel pnlChartEmpty;
+        protected global::System.Web.UI.WebControls.Repeater rptProjects;
+        protected global::System.Web.UI.WebControls.HyperLink lnkViewAll;
         protected global::System.Web.UI.WebControls.GridView gvEvents;
+        protected global::System.Web.UI.WebControls.Literal litChartScript;
     }
 }
