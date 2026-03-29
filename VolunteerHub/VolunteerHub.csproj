@@ -151,6 +151,7 @@
     <Content Include="Pages\Admin\ProjectDetail.aspx" />
     <Content Include="Pages\Admin\Volunteers.aspx" />
     <Content Include="Pages\Admin\VolunteerDetail.aspx" />
+    <Content Include="Pages\Admin\VolunteerProjectEvents.aspx" />
     <!-- Volunteer pages -->
     <Content Include="Pages\Volunteer\Dashboard.aspx" />
     <Content Include="Pages\Volunteer\Projects.aspx" />
@@ -374,6 +375,13 @@
     <Compile Include="Pages\Admin\VolunteerDetail.aspx.cs">
       <DependentUpon>VolunteerDetail.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pages\Admin\VolunteerProjectEvents.aspx.cs">
+      <DependentUpon>VolunteerProjectEvents.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pages\Admin\VolunteerProjectEvents.aspx.designer.cs">
+      <DependentUpon>VolunteerProjectEvents.aspx</DependentUpon>
     </Compile>
     <!-- Pages: Volunteer -->
     <Compile Include="Pages\Volunteer\Dashboard.aspx.cs">

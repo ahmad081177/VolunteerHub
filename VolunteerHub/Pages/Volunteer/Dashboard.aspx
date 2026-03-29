@@ -101,8 +101,9 @@
                     <asp:BoundField DataField="ProjectTitle" HeaderText="Project" />
                     <asp:BoundField DataField="EventDate"    HeaderText="Date"    DataFormatString="{0:MMM dd, yyyy}" />
                     <asp:BoundField DataField="HoursLogged"  HeaderText="Hours"   DataFormatString="{0:0.#}" />
-                    <asp:BoundField DataField="Notes"        HeaderText="Notes"   NullDisplayText="—" />
-                    <asp:TemplateField HeaderText="" ItemStyle-CssClass="vh-table-actions">
+                    <asp:BoundField DataField="Notes"        HeaderText="Notes"   NullDisplayText="—" />                    <asp:TemplateField HeaderText="Photos">
+                        <ItemTemplate><%# BuildImageThumb((int)Eval("Id")) %></ItemTemplate>
+                    </asp:TemplateField>                    <asp:TemplateField HeaderText="" ItemStyle-CssClass="vh-table-actions">
                         <ItemTemplate>
                             <a href='<%# ResolveUrl("~/Pages/Volunteer/EditEvent.aspx") + "?id=" + Eval("Id") %>'
                                class="btn btn-sm vh-btn-outline" title="Edit">

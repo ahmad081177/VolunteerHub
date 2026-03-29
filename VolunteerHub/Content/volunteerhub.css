@@ -1381,6 +1381,34 @@ select.vh-input {
 }
 
 /* ---------- Badge muted (inactive/disabled state) ---------- */
+
+/* ---------- Photo thumbnail (clickable) ---------- */
+.vh-photo-thumb { cursor: pointer; }
+.vh-photo-thumb:hover img { box-shadow: 0 0 0 2px var(--vh-primary); }
+
+/* ---------- Gallery lightbox overlay ---------- */
+.vh-gallery-overlay {
+    position: fixed; inset: 0; z-index: 9999;
+    background: rgba(0,0,0,0.85);
+    display: flex; align-items: center; justify-content: center;
+    padding: 2rem;
+}
+.vh-gallery-close {
+    position: absolute; top: 1rem; right: 1.5rem;
+    font-size: 2.5rem; color: #fff; background: none; border: none;
+    cursor: pointer; line-height: 1; opacity: .8;
+}
+.vh-gallery-close:hover { opacity: 1; }
+.vh-gallery-wrap {
+    display: flex; flex-wrap: wrap; gap: 12px;
+    max-height: 80vh; overflow-y: auto;
+    justify-content: center;
+}
+.vh-gallery-img {
+    max-width: 360px; max-height: 360px;
+    object-fit: contain; border-radius: 10px;
+    box-shadow: 0 4px 24px rgba(0,0,0,.4);
+}
 .vh-badge-muted { background: #F1F5F9; color: var(--vh-text-muted); }
 
 /* ---------- Empty state (alias for vh-empty) ---------- */

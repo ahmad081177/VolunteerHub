@@ -88,6 +88,14 @@
                             </div>
                         </ItemTemplate>
                     </asp:TemplateField>
+                    <asp:TemplateField HeaderText="" ItemStyle-CssClass="vh-table-actions">
+                        <ItemTemplate>
+                            <a href='<%# ResolveUrl("~/Pages/Admin/VolunteerProjectEvents.aspx") + "?projectId=" + Request.QueryString["id"] + "&userId=" + Eval("UserId") %>'
+                               class="btn btn-sm vh-btn-outline" title="View Events">
+                                <i class="bi bi-clock-history"></i>
+                            </a>
+                        </ItemTemplate>
+                    </asp:TemplateField>
                 </Columns>
             </asp:GridView>
         </div>

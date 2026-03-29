@@ -57,8 +57,9 @@
                     <asp:BoundField DataField="ProjectTitle" HeaderText="Project" />
                     <asp:BoundField DataField="EventDate"    HeaderText="Date"    DataFormatString="{0:MMM dd, yyyy}" />
                     <asp:BoundField DataField="HoursLogged"  HeaderText="Hours"   DataFormatString="{0:0.#}" />
-                    <asp:BoundField DataField="Notes"        HeaderText="Notes"   NullDisplayText="—" />
-                </Columns>
+                    <asp:BoundField DataField="Notes"        HeaderText="Notes"   NullDisplayText="—" />                    <asp:TemplateField HeaderText="Photos">
+                        <ItemTemplate><%# BuildImageThumb((int)Eval("Id")) %></ItemTemplate>
+                    </asp:TemplateField>                </Columns>
             </asp:GridView>
         </div>
     </div>

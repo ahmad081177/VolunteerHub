@@ -106,11 +106,54 @@
         initSidebarToggle();
         animateCounters();
         // image preview inputs are initialised per-page via VH.initImagePreview()
+
+        // Photo thumbnail click → gallery lightbox
+        document.addEventListener('click', function (e) {
+            var thumb = e.target.closest('.vh-photo-thumb');
+            if (!thumb) return;
+            try {
+                var images = JSON.parse(thumb.getAttribute('data-images'));
+                VH.showGallery(images);
+            } catch (ex) { /* ignore parse errors */ }
+        });
     });
 
     // Expose public API
     window.VH = {
         initImagePreview: initImagePreview,
+        // ── Photo gallery lightbox ────────────────────────────────
+        showGallery: function (images) {
+            if (!images || !images.length) return;
+            // Create overlay
+            var overlay = document.createElement('div');
+            overlay.className = 'vh-gallery-overlay';
+            overlay.onclick = function (e) { if (e.target === overlay) overlay.remove(); };
+
+            // Close button
+            var close = document.createElement('button');
+            close.className = 'vh-gallery-close';
+            close.innerHTML = '&times;';
+            close.onclick = function () { overlay.remove(); };
+            overlay.appendChild(close);
+
+            // Image container
+            var wrap = document.createElement('div');
+            wrap.className = 'vh-gallery-wrap';
+            images.forEach(function (src) {
+                var img = document.createElement('img');
+                img.src = src;
+                img.className = 'vh-gallery-img';
+                wrap.appendChild(img);
+            });
+            overlay.appendChild(wrap);
+            document.body.appendChild(overlay);
+
+            // Close on Escape key
+            var escHandler = function (e) {
+                if (e.key === 'Escape') { overlay.remove(); document.removeEventListener('keydown', escHandler); }
+            };
+            document.addEventListener('keydown', escHandler);
+        },
         // Build a Chart.js bar chart
         barChart: function (canvasId, labels, data, color) {
             var ctx = document.getElementById(canvasId);

@@ -83,6 +83,7 @@ namespace VolunteerHub.Pages.Admin
 
                 rows.Add(new VolunteerProgressRow
                 {
+                    UserId      = userId,
                     FullName    = user.FullName,
                     Initials    = user.Initials,
                     Email       = user.Email,
@@ -98,6 +99,7 @@ namespace VolunteerHub.Pages.Admin
         /// <summary>Flat view-model combining volunteer user info with their project hours.</summary>
         private class VolunteerProgressRow
         {
+            public int      UserId      { get; set; }
             public string   FullName    { get; set; }
             public string   Initials    { get; set; }
             public string   Email       { get; set; }
