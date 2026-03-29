@@ -18,8 +18,13 @@ namespace VolunteerHub.Pages.Admin
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl statProjects;
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl statEvents;
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl statCompleted;
+        protected global::System.Web.UI.HtmlControls.HtmlAnchor lnkExportExcel;
         protected global::System.Web.UI.WebControls.Panel pnlChart;
         protected global::System.Web.UI.WebControls.Panel pnlChartEmpty;
+        protected global::System.Web.UI.WebControls.Panel pnlVolHrsChart;
+        protected global::System.Web.UI.WebControls.Panel pnlVolHrsEmpty;
+        protected global::System.Web.UI.WebControls.Panel pnlVolProjChart;
+        protected global::System.Web.UI.WebControls.Panel pnlVolProjEmpty;
         protected global::System.Web.UI.WebControls.Repeater rptProjects;
         protected global::System.Web.UI.WebControls.HyperLink lnkViewAll;
         protected global::System.Web.UI.WebControls.GridView gvEvents;

@@ -15,7 +15,13 @@
         <div class="d-flex gap-2">
             <a href='<%= ResolveUrl("~/Pages/Admin/EditProject.aspx") + "?id=" + Request.QueryString["id"] %>'
                class="btn vh-btn-ghost"><i class="bi bi-pencil"></i> Edit</a>
-            <a href="<%= ResolveUrl("~/Pages/Admin/Projects.aspx") %>" class="btn vh-btn-outline">
+            <a id="lnkExportExcel" runat="server" class="btn vh-btn-outline no-print">
+                <i class="bi bi-file-earmark-excel"></i> Export Excel
+            </a>
+            <button type="button" class="btn vh-btn-outline no-print" onclick="window.print()">
+                <i class="bi bi-printer"></i> Print / PDF
+            </button>
+            <a href="<%= ResolveUrl("~/Pages/Admin/Projects.aspx") %>" class="btn vh-btn-outline no-print">
                 <i class="bi bi-arrow-left"></i> Back
             </a>
         </div>

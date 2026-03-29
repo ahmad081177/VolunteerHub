@@ -35,6 +35,7 @@ namespace VolunteerHub.Pages.Admin
             pageTitle.InnerText      = p.Title;
             breadcrumbTitle.InnerText = p.Title;
             pageMeta.InnerText       = $"{p.Location ?? "No location"}  •  {p.StartDate:MMM dd, yyyy} – {p.EndDate:MMM dd, yyyy}";
+            lnkExportExcel.HRef      = ResolveUrl($"~/Helpers/ExportHandler.ashx?type=project&id={id}");
             if (!string.IsNullOrWhiteSpace(p.Description))
                 descriptionText.InnerText = p.Description;
             else

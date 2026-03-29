@@ -16,6 +16,7 @@ namespace VolunteerHub.Pages.Admin
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl statDaysLeft;
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl descriptionCard;
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl descriptionText;
+        protected global::System.Web.UI.HtmlControls.HtmlAnchor lnkExportExcel;
         protected global::System.Web.UI.WebControls.GridView gvVolunteers;
     }
 }

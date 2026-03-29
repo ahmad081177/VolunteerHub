@@ -10,6 +10,9 @@
             <h1 class="vh-page-title">Volunteers</h1>
             <p class="vh-page-desc">All volunteers in your workspace.</p>
         </div>
+        <a href="<%= ResolveUrl("~/Helpers/ExportHandler.ashx?type=volunteers") %>" class="btn vh-btn-outline">
+            <i class="bi bi-file-earmark-excel"></i> Export Excel
+        </a>
     </div>
 
     <div class="vh-card">

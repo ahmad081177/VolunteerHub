@@ -262,5 +262,47 @@ namespace VolunteerHub.DAL
                 cmd.ExecuteNonQuery();
             }
         }
+
+        // Returns list of (VolunteerFullName, TotalHours) for the volunteer bar chart on the admin dashboard
+        public static List<(string FullName, decimal Hours)> GetHoursPerVolunteer(int workspaceId)
+        {
+            // LEFT JOIN keeps volunteers with zero hours in the result; IIF avoids NULL in the sum.
+            const string sql = @"SELECT u.FirstName, u.LastName,
+                IIF(SUM(e.HoursLogged) IS NULL, 0, SUM(e.HoursLogged)) AS TotalHours
+                FROM AppUser u LEFT JOIN Events e ON u.Id = e.UserId
+                WHERE u.WorkspaceId = ? AND u.Role = 'Volunteer'
+                GROUP BY u.FirstName, u.LastName
+                ORDER BY u.FirstName, u.LastName";
+            var list = new List<(string, decimal)>();
+            using (var conn = DbHelper.GetConnection())
+            using (var cmd  = new OleDbCommand(sql, conn))
+            {
+                cmd.Parameters.AddWithValue("@w", workspaceId);
+                using (var r = cmd.ExecuteReader())
+                    while (r.Read())
+                        list.Add((r["FirstName"] + " " + r["LastName"], Convert.ToDecimal(r["TotalHours"])));
+            }
+            return list;
+        }
+
+        // Returns list of (VolunteerFullName, EnrolledProjectCount) for the volunteer bar chart on the admin dashboard
+        public static List<(string FullName, int Count)> GetProjectsPerVolunteer(int workspaceId)
+        {
+            const string sql = @"SELECT u.FirstName, u.LastName, COUNT(vp.ProjectId) AS ProjCount
+                FROM AppUser u LEFT JOIN VolunteerProject vp ON u.Id = vp.UserId
+                WHERE u.WorkspaceId = ? AND u.Role = 'Volunteer'
+                GROUP BY u.FirstName, u.LastName
+                ORDER BY u.FirstName, u.LastName";
+            var list = new List<(string, int)>();
+            using (var conn = DbHelper.GetConnection())
+            using (var cmd  = new OleDbCommand(sql, conn))
+            {
+                cmd.Parameters.AddWithValue("@w", workspaceId);
+                using (var r = cmd.ExecuteReader())
+                    while (r.Read())
+                        list.Add((r["FirstName"] + " " + r["LastName"], Convert.ToInt32(r["ProjCount"])));
+            }
+            return list;
+        }
     }
 }

@@ -10,9 +10,14 @@
             <h1 class="vh-page-title">Projects</h1>
             <p class="vh-page-desc">Manage all volunteering projects in your workspace.</p>
         </div>
-        <a href="<%= ResolveUrl("~/Pages/Admin/CreateProject.aspx") %>" class="btn vh-btn-primary">
-            <i class="bi bi-plus-lg"></i> New Project
-        </a>
+        <div class="d-flex gap-2">
+            <a href="<%= ResolveUrl("~/Helpers/ExportHandler.ashx?type=projects") %>" class="btn vh-btn-outline">
+                <i class="bi bi-file-earmark-excel"></i> Export Excel
+            </a>
+            <a href="<%= ResolveUrl("~/Pages/Admin/CreateProject.aspx") %>" class="btn vh-btn-primary">
+                <i class="bi bi-plus-lg"></i> New Project
+            </a>
+        </div>
     </div>
 
     <asp:Literal ID="litAlert" runat="server"></asp:Literal>

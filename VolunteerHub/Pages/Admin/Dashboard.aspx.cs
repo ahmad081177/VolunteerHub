@@ -68,8 +68,13 @@ namespace VolunteerHub.Pages.Admin
             {
                 pnlVolsChart.Visible = false; pnlVolsEmpty.Visible = true;
             }
+
             sb.AppendLine("</script>");
             litChartScript.Text = sb.ToString();
+
+            // Recent 5 volunteers
+            gvVolunteers.DataSource = volunteers.Take(5).ToList();
+            gvVolunteers.DataBind();
         }
     }
 }

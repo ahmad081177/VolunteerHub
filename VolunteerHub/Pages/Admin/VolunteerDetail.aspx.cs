@@ -36,6 +36,7 @@ namespace VolunteerHub.Pages.Admin
             profileJoined.InnerText  = $"Joined {user.CreatedAt:MMM dd, yyyy}";
             profileStatus.InnerText  = user.IsActive ? "Active" : "Inactive";
             profileStatus.Attributes["class"] = user.IsActive ? "vh-badge vh-badge-success" : "vh-badge vh-badge-muted";
+            lnkExportExcel.HRef      = ResolveUrl($"~/Helpers/ExportHandler.ashx?type=volunteer&id={id}");
 
             // Metrics
             var events      = EventDAL.GetByUser(id);
@@ -98,11 +99,44 @@ namespace VolunteerHub.Pages.Admin
             pnlChart.Visible      = hasData;
             pnlChartEmpty.Visible = !hasData;
 
-            var labels = JsonConvert.SerializeObject(overtime.ConvertAll(x => x.Month));
-            var data   = JsonConvert.SerializeObject(overtime.ConvertAll(x => x.Hours));
-            litChartScript.Text = hasData
-                ? $"<script>VH.lineChart('chartHoursOverTime', {labels}, {data}, '#6366F1');</script>"
-                : "";
+            var sb = new StringBuilder("<script>\n");
+            if (hasData)
+            {
+                var labels = JsonConvert.SerializeObject(overtime.ConvertAll(x => x.Month));
+                var data   = JsonConvert.SerializeObject(overtime.ConvertAll(x => x.Hours));
+                sb.AppendLine($"VH.lineChart('chartHoursOverTime', {labels}, {data}, '#6366F1');");
+            }
+
+            // Volunteer comparison charts (workspace-wide)
+            int wsId = user.WorkspaceId ?? 0;
+            var volHrsData  = UserDAL.GetHoursPerVolunteer(wsId);
+            var volProjData = UserDAL.GetProjectsPerVolunteer(wsId);
+
+            if (volHrsData.Count > 0)
+            {
+                pnlVolHrsChart.Visible = true;  pnlVolHrsEmpty.Visible = false;
+                var labels = JsonConvert.SerializeObject(volHrsData.ConvertAll(x => x.FullName));
+                var data   = JsonConvert.SerializeObject(volHrsData.ConvertAll(x => x.Hours));
+                sb.AppendLine($"VH.barChart('chartHoursPerVolunteer', {labels}, {data}, '#10B981');");
+            }
+            else
+            {
+                pnlVolHrsChart.Visible = false; pnlVolHrsEmpty.Visible = true;
+            }
+            if (volProjData.Count > 0)
+            {
+                pnlVolProjChart.Visible = true;  pnlVolProjEmpty.Visible = false;
+                var labels = JsonConvert.SerializeObject(volProjData.ConvertAll(x => x.FullName));
+                var data   = JsonConvert.SerializeObject(volProjData.ConvertAll(x => x.Count));
+                sb.AppendLine($"VH.barChart('chartProjectsPerVolunteer', {labels}, {data}, '#F59E0B');");
+            }
+            else
+            {
+                pnlVolProjChart.Visible = false; pnlVolProjEmpty.Visible = true;
+            }
+
+            sb.AppendLine("</script>");
+            litChartScript.Text = sb.ToString();
         }
 
         private class ProjectProgressRow

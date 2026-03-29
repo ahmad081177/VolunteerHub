@@ -130,6 +130,8 @@
     <!-- VolunteerHub design system -->
     <Content Include="Content\volunteerhub.css" />
     <Content Include="Scripts\volunteerhub.js" />
+    <!-- Helpers -->
+    <Content Include="Helpers\ExportHandler.ashx" />
     <!-- Dashboard master page -->
     <Content Include="DashboardMaster.Master" />
     <!-- Pages -->
@@ -280,6 +282,9 @@
     <!-- Models + DAL are in separate class library projects (VolunteerHub.Models / VolunteerHub.DAL) -->
     <!-- AuthHelper moved to VolunteerHub.DAL\Helpers\AuthHelper.cs -->
     <!-- Only web-layer files remain here -->
+    <Compile Include="Helpers\ExportHandler.ashx.cs">
+      <DependentUpon>ExportHandler.ashx</DependentUpon>
+    </Compile>
     <Compile Include="Helpers\ImageHelper.cs" />
     <Compile Include="Helpers\ProjectHelper.cs" />
     <!-- Base -->

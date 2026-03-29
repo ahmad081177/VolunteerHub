@@ -117,6 +117,47 @@
             </asp:GridView>
         </div>
     </div>
+
+    <!-- Recent Volunteers -->
+    <div class="vh-card mt-4">
+        <div class="vh-card-header">
+            <h2 class="vh-card-title"><i class="bi bi-people"></i> Recent Volunteers</h2>
+            <a href="<%= ResolveUrl("~/Pages/Admin/Volunteers.aspx") %>" class="btn vh-btn-outline btn-sm">View All</a>
+        </div>
+        <div class="vh-card-body p-0">
+            <asp:GridView ID="gvVolunteers" runat="server" AutoGenerateColumns="false"
+                CssClass="vh-table" GridLines="None" EmptyDataText="No volunteers registered yet.">
+                <Columns>
+                    <asp:TemplateField HeaderText="Volunteer">
+                        <ItemTemplate>
+                            <div class="vh-user-row">
+                                <div class="vh-avatar-sm"><%# Eval("Initials") %></div>
+                                <div>
+                                    <div class="fw-semibold"><%# Eval("FullName") %></div>
+                                    <div class="text-muted small"><%# Eval("Email") %></div>
+                                </div>
+                            </div>
+                        </ItemTemplate>
+                    </asp:TemplateField>
+                    <asp:TemplateField HeaderText="Status">
+                        <ItemTemplate>
+                            <span class='<%# (bool)Eval("IsActive") ? "vh-badge vh-badge-success" : "vh-badge vh-badge-muted" %>'>
+                                <%# (bool)Eval("IsActive") ? "Active" : "Inactive" %>
+                            </span>
+                        </ItemTemplate>
+                    </asp:TemplateField>
+                    <asp:BoundField DataField="CreatedAt" HeaderText="Joined" DataFormatString="{0:MMM dd, yyyy}" />
+                    <asp:TemplateField HeaderText="" ItemStyle-CssClass="vh-table-actions">
+                        <ItemTemplate>
+                            <a href='<%# ResolveUrl("~/Pages/Admin/VolunteerDetail.aspx?id=" + Eval("Id")) %>' class="btn vh-btn-outline btn-sm">
+                                <i class="bi bi-eye"></i>
+                            </a>
+                        </ItemTemplate>
+                    </asp:TemplateField>
+                </Columns>
+            </asp:GridView>
+        </div>
+    </div>
 </asp:Content>
 
 <asp:Content ContentPlaceHolderID="ScriptContent" runat="server">

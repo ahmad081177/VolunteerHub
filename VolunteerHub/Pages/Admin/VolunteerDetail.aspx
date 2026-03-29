@@ -18,9 +18,15 @@
                 <span class="text-muted small" id="profileJoined" runat="server"></span>
             </div>
         </div>
-        <a href="<%= ResolveUrl("~/Pages/Admin/Volunteers.aspx") %>" class="btn vh-btn-outline ms-auto">
+        <a href="<%= ResolveUrl("~/Pages/Admin/Volunteers.aspx") %>" class="btn vh-btn-outline ms-auto no-print">
             <i class="bi bi-arrow-left"></i> Back
         </a>
+        <a id="lnkExportExcel" runat="server" class="btn vh-btn-outline no-print">
+            <i class="bi bi-file-earmark-excel"></i> Export Excel
+        </a>
+        <button type="button" class="btn vh-btn-outline no-print" onclick="window.print()">
+            <i class="bi bi-printer"></i> Print / PDF
+        </button>
     </div>
 
     <!-- Stats -->
@@ -107,6 +113,50 @@
                             <%# rptProjects.Items.Count == 0 ? "<p class='p-3 text-muted small'>Not enrolled in any projects yet.</p>" : "" %>
                         </FooterTemplate>
                     </asp:Repeater>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Volunteer Comparison Charts -->
+    <div class="row g-4 mb-4">
+        <div class="col-lg-6">
+            <div class="vh-card h-100">
+                <div class="vh-card-header">
+                    <h2 class="vh-card-title"><i class="bi bi-bar-chart-line-fill"></i> Hours per Volunteer</h2>
+                </div>
+                <div class="vh-card-body">
+                    <asp:Panel ID="pnlVolHrsChart" runat="server">
+                        <div class="vh-chart-container">
+                            <canvas id="chartHoursPerVolunteer"></canvas>
+                        </div>
+                    </asp:Panel>
+                    <asp:Panel ID="pnlVolHrsEmpty" runat="server" Visible="false">
+                        <div class="vh-empty-state py-4">
+                            <i class="bi bi-bar-chart-line vh-empty-icon"></i>
+                            <p class="vh-empty-text">No hours logged by volunteers yet.</p>
+                        </div>
+                    </asp:Panel>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="vh-card h-100">
+                <div class="vh-card-header">
+                    <h2 class="vh-card-title"><i class="bi bi-person-fill-check"></i> Projects per Volunteer</h2>
+                </div>
+                <div class="vh-card-body">
+                    <asp:Panel ID="pnlVolProjChart" runat="server">
+                        <div class="vh-chart-container">
+                            <canvas id="chartProjectsPerVolunteer"></canvas>
+                        </div>
+                    </asp:Panel>
+                    <asp:Panel ID="pnlVolProjEmpty" runat="server" Visible="false">
+                        <div class="vh-empty-state py-4">
+                            <i class="bi bi-person vh-empty-icon"></i>
+                            <p class="vh-empty-text">No volunteers enrolled in projects yet.</p>
+                        </div>
+                    </asp:Panel>
                 </div>
             </div>
         </div>

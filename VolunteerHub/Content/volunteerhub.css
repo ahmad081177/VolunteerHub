@@ -1407,6 +1407,49 @@ select.vh-input {
 .vh-gallery-img {
     max-width: 360px; max-height: 360px;
     object-fit: contain; border-radius: 10px;
+}
+
+/* =========================================================
+   Print / PDF styles
+   Triggered by window.print() from "Print / PDF" button.
+   Goal: hide all chrome, show page content + charts cleanly.
+   ========================================================= */
+@media print {
+    /* Hide navigation chrome */
+    .vh-sidebar,
+    .vh-sidebar-overlay,
+    .vh-topbar,
+    .vh-footer,
+    .vh-landing-nav,
+    .vh-landing-footer,
+    .vh-hamburger,
+    .vh-page-breadcrumb { display: none !important; }
+
+    /* Hide action buttons marked with no-print */
+    .no-print,
+    .vh-btn-ghost,
+    .vh-table-actions { display: none !important; }
+
+    /* Remove sidebar offset so content fills the page */
+    .vh-main-wrapper { margin-left: 0 !important; padding: 0 !important; }
+    .vh-main-content { padding: 0 !important; }
+
+    /* Ensure cards and charts render on a white background */
+    body, .vh-app-body { background: #fff !important; }
+    .vh-card { box-shadow: none !important; border: 1px solid #e2e8f0 !important; }
+
+    /* Charts: canvas elements must be visible and sized */
+    canvas { max-width: 100% !important; }
+
+    /* Keep stats grid readable */
+    .vh-stats-grid { grid-template-columns: repeat(2, 1fr) !important; }
+
+    /* Page breaks: avoid breaking inside cards */
+    .vh-card, .vh-stat-card { break-inside: avoid; page-break-inside: avoid; }
+
+    /* Show URLs after links in print */
+    a[href]:after { content: none !important; }
+}
     box-shadow: 0 4px 24px rgba(0,0,0,.4);
 }
 .vh-badge-muted { background: #F1F5F9; color: var(--vh-text-muted); }
