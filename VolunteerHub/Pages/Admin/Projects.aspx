@@ -20,7 +20,8 @@
     <div class="vh-card">
         <div class="vh-card-body p-0">
             <asp:GridView ID="gvProjects" runat="server" AutoGenerateColumns="false"
-                CssClass="vh-table" GridLines="None" EmptyDataText="No projects yet. Create your first project!">
+                CssClass="vh-table" GridLines="None" EmptyDataText="No projects yet. Create your first project!"
+                OnRowCommand="gvProjects_RowCommand">
                 <Columns>
                     <asp:BoundField DataField="Title"     HeaderText="Project Title" />
                     <asp:TemplateField HeaderText="Status">
@@ -39,6 +40,11 @@
                             <a href='<%# ResolveUrl("~/Pages/Admin/EditProject.aspx?id=" + Eval("Id")) %>' class="btn vh-btn-ghost btn-sm">
                                 <i class="bi bi-pencil"></i>
                             </a>
+                            <asp:LinkButton runat="server" CommandName="Delete" CommandArgument='<%# Eval("Id") %>'
+                                CssClass="btn vh-btn-danger btn-sm"
+                                OnClientClick="return confirm('Delete this project? All events and enrollments will be removed. This cannot be undone.');">
+                                <i class="bi bi-trash"></i>
+                            </asp:LinkButton>
                         </ItemTemplate>
                     </asp:TemplateField>
                 </Columns>

@@ -722,6 +722,13 @@ textarea.vh-form-control { resize: vertical; min-height: 100px; }
     border: 1px solid #FECACA;
 }
 
+/* Alias used by all code-behinds */
+.vh-alert-danger {
+    background: var(--vh-danger-light);
+    color: #991B1B;
+    border: 1px solid #FECACA;
+}
+
 .vh-alert-warning {
     background: var(--vh-warning-light);
     color: #92400E;
@@ -893,6 +900,217 @@ textarea.vh-form-control { resize: vertical; min-height: 100px; }
 
 .d-flex    { display: flex !important; }
 .d-grid    { display: grid !important; }
+.d-none    { display: none !important; }
+.flex-wrap { flex-wrap: wrap !important; }
+.align-center { align-items: center !important; }
+.justify-between { justify-content: space-between !important; }
+
+/* =========================================================
+   Dashboard Shell — DashboardMaster.Master class mapping
+   ========================================================= */
+
+/* Body */
+.vh-app-body { margin: 0; padding: 0; background: var(--vh-body-bg); }
+
+/* ── Sidebar Overlay (mobile) ── */
+.vh-sidebar-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.5);
+    z-index: 99;
+}
+.vh-sidebar-overlay.show { display: block; }
+
+/* ── Sidebar Brand / Logo Area ── */
+.vh-sidebar-brand {
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--vh-sidebar-border);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-height: 68px;
+    flex-shrink: 0;
+}
+
+/* vh-sidebar-logo is now the icon box inside vh-sidebar-brand */
+.vh-sidebar-brand .vh-sidebar-logo {
+    width: 36px; height: 36px;
+    background: var(--vh-primary);
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px;
+    color: white;
+    flex-shrink: 0;
+    box-shadow: 0 2px 8px rgba(79,70,229,0.4);
+    padding: 0;
+    border-bottom: none;
+    min-height: unset;
+    gap: 0;
+}
+
+.vh-sidebar-brand-text {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+    min-width: 0;
+}
+
+.vh-sidebar-brand-name {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--vh-sidebar-white);
+    letter-spacing: -0.3px;
+    white-space: nowrap;
+}
+
+.vh-sidebar-brand-role {
+    font-size: 11px;
+    color: var(--vh-sidebar-text);
+    font-weight: 500;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+}
+
+/* ── Sidebar Navigation Section ── */
+.vh-sidebar-nav {
+    flex: 1;
+    padding: 8px 12px;
+    overflow-y: auto;
+}
+.vh-nav-group { margin-bottom: 4px; }
+
+/* ── Sidebar Footer (Sign Out) ── */
+.vh-sidebar-footer {
+    padding: 12px;
+    border-top: 1px solid var(--vh-sidebar-border);
+    flex-shrink: 0;
+}
+
+.vh-logout-item { color: var(--vh-sidebar-text) !important; }
+.vh-logout-item:hover {
+    background: rgba(239,68,68,0.15) !important;
+    color: #FCA5A5 !important;
+}
+
+/* ── Main Wrapper — fixes sidebar overlap ── */
+.vh-main-wrapper {
+    margin-left: var(--vh-sidebar-width);
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+/* ── Top Bar ── */
+.vh-topbar {
+    height: var(--vh-header-height);
+    background: var(--vh-card-bg);
+    border-bottom: 1px solid var(--vh-border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 24px;
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    box-shadow: var(--vh-shadow-xs);
+}
+
+.vh-topbar-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex: 1;
+}
+
+.vh-topbar-right {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+/* Hamburger button (mobile) */
+.vh-hamburger {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 38px; height: 38px;
+    border: 1px solid var(--vh-border);
+    border-radius: var(--vh-radius-sm);
+    background: transparent;
+    color: var(--vh-text);
+    font-size: 20px;
+    cursor: pointer;
+    transition: background var(--vh-transition);
+}
+.vh-hamburger:hover { background: var(--vh-border-light); }
+
+/* Breadcrumb in topbar */
+.vh-page-breadcrumb { font-size: 13px; color: var(--vh-text-muted); }
+.vh-breadcrumb-item { color: var(--vh-text); font-weight: 500; }
+
+/* User chip (topbar right) */
+.vh-user-chip {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 5px 10px;
+    border-radius: var(--vh-radius);
+    background: var(--vh-border-light);
+}
+
+.vh-user-avatar {
+    width: 34px; height: 34px;
+    border-radius: 50%;
+    background: var(--vh-primary);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px;
+    font-weight: 700;
+    color: white;
+    flex-shrink: 0;
+}
+
+.vh-user-info { display: flex; flex-direction: column; gap: 1px; }
+
+.vh-user-name {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--vh-text);
+    line-height: 1.2;
+}
+
+.vh-user-role {
+    font-size: 11px;
+    color: var(--vh-text-muted);
+    line-height: 1.2;
+}
+
+/* ── Main Content ── */
+.vh-main-content { flex: 1; padding: 28px; }
+
+/* ── Footer ── */
+.vh-footer {
+    padding: 16px 28px;
+    border-top: 1px solid var(--vh-border);
+    font-size: 12px;
+    color: var(--vh-text-muted);
+    text-align: center;
+}
+
+/* ── Mobile sidebar ── */
+@media (max-width: 991.98px) {
+    .vh-sidebar {
+        transform: translateX(-100%);
+    }
+    .vh-sidebar.open {
+        transform: translateX(0);
+    }
+    .vh-main-wrapper {
+        margin-left: 0;
+    }
+}
+.d-grid    { display: grid !important; }
 .flex-wrap { flex-wrap: wrap !important; }
 .align-center { align-items: center !important; }
 .justify-between { justify-content: space-between !important; }
@@ -948,6 +1166,64 @@ textarea.vh-form-control { resize: vertical; min-height: 100px; }
 .vh-auth-body-scroll::-webkit-scrollbar { width: 4px; }
 .vh-auth-body-scroll::-webkit-scrollbar-thumb { background: var(--vh-border); border-radius: 4px; }
 
+/* ---------- Auth — input group (password toggle) ---------- */
+.vh-input-group {
+    position: relative;
+    display: flex;
+    align-items: stretch;
+}
+
+.vh-input-group .vh-form-control {
+    flex: 1;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    border-right: none;
+    z-index: 1;
+}
+
+.vh-input-addon {
+    display: flex;
+    align-items: center;
+    padding: 0 13px;
+    background: #ffffff;
+    border: 1.5px solid var(--vh-border);
+    border-left: none;
+    border-top-right-radius: var(--vh-radius-sm);
+    border-bottom-right-radius: var(--vh-radius-sm);
+    color: var(--vh-text-muted);
+    cursor: pointer;
+    font-size: 16px;
+    transition: color var(--vh-transition), border-color var(--vh-transition);
+    line-height: 1;
+}
+
+.vh-input-addon:hover { color: var(--vh-text); }
+
+.vh-input-group:focus-within .vh-form-control,
+.vh-input-group:focus-within .vh-input-addon {
+    border-color: var(--vh-primary);
+}
+
+.vh-input-group:focus-within .vh-form-control {
+    box-shadow: none;       /* shadow handled by the full group */
+}
+
+.vh-input-group:focus-within {
+    box-shadow: 0 0 0 3px rgba(var(--vh-primary-rgb), 0.12);
+    border-radius: var(--vh-radius-sm);
+}
+
+/* ---------- Auth — field-level validation error ---------- */
+.vh-field-error {
+    display: block;
+    font-size: 12px;
+    color: var(--vh-danger);
+    margin-top: 4px;
+    font-weight: 500;
+}
+
+.vh-field-error:empty { display: none; }
+
 /* Profile image preview */
 .vh-img-preview {
     width: 80px; height: 80px;
@@ -981,3 +1257,324 @@ textarea.vh-form-control { resize: vertical; min-height: 100px; }
 .vh-hours-ok      { background: var(--vh-success-light); color: #065F46; }
 .vh-hours-warning { background: var(--vh-warning-light); color: #92400E; }
 .vh-hours-alert   { background: var(--vh-danger-light);  color: #991B1B; }
+
+/* ---------- Aliases — form shorthand classes used in page markup ---------- */
+
+/* .vh-label  →  mirrors .vh-form-label */
+.vh-label {
+    display: block;
+    font-size: 13.5px;
+    font-weight: 600;
+    color: var(--vh-text-secondary);
+    margin-bottom: 7px;
+}
+
+/* .vh-required  →  red asterisk inside labels */
+.vh-required {
+    color: var(--vh-danger);
+    margin-left: 2px;
+}
+
+/* .vh-input  →  mirrors .vh-form-control */
+.vh-input {
+    display: block;
+    width: 100%;
+    padding: 10px 14px;
+    font-size: 14px;
+    color: var(--vh-text);
+    background: white;
+    border: 1.5px solid var(--vh-border);
+    border-radius: var(--vh-radius-sm);
+    transition: border-color var(--vh-transition), box-shadow var(--vh-transition);
+    line-height: 1.5;
+    font-family: inherit;
+    box-sizing: border-box;
+}
+.vh-input:focus {
+    border-color: var(--vh-primary);
+    box-shadow: 0 0 0 3px rgba(var(--vh-primary-rgb), 0.12);
+    outline: none;
+}
+.vh-input::placeholder { color: var(--vh-text-muted); }
+select.vh-input {
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3E%3Cpath stroke='%236B7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    background-size: 18px;
+    padding-right: 36px;
+}
+
+/* .vh-page-desc  →  mirrors .vh-page-subtitle */
+.vh-page-desc {
+    font-size: 14px;
+    color: var(--vh-text-muted);
+    margin: 4px 0 0;
+}
+
+/* ---------- Upload zone ---------- */
+.vh-upload-zone {
+    position: relative;
+    border: 2px dashed var(--vh-border);
+    border-radius: var(--vh-radius);
+    padding: 24px 20px;
+    text-align: center;
+    background: #FAFBFC;
+    transition: border-color var(--vh-transition), background var(--vh-transition);
+    cursor: pointer;
+}
+.vh-upload-zone:hover {
+    border-color: var(--vh-primary);
+    background: var(--vh-primary-light);
+}
+.vh-upload-hint {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    font-size: 13.5px;
+    color: var(--vh-text-muted);
+    pointer-events: none;
+}
+.vh-upload-hint i {
+    font-size: 28px;
+    color: var(--vh-primary);
+    opacity: 0.7;
+}
+.vh-file-input {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    cursor: pointer;
+    z-index: 2;
+}
+
+/* ============================================================
+   MISSING CLASSES — added to fix unstyled elements
+   ============================================================ */
+
+/* ---------- Stat card color modifiers ---------- */
+/* Apply a left border accent and tint the nested icon */
+.vh-stat-indigo { border-left: 3px solid #6366F1; }
+.vh-stat-indigo .vh-stat-icon { background: #EEF2FF; color: #6366F1; }
+
+.vh-stat-blue { border-left: 3px solid #3B82F6; }
+.vh-stat-blue .vh-stat-icon { background: #EFF6FF; color: #3B82F6; }
+
+.vh-stat-emerald { border-left: 3px solid #10B981; }
+.vh-stat-emerald .vh-stat-icon { background: #ECFDF5; color: #10B981; }
+
+.vh-stat-amber { border-left: 3px solid #F59E0B; }
+.vh-stat-amber .vh-stat-icon { background: #FFFBEB; color: #F59E0B; }
+
+/* ---------- Avatar small — add missing base styles ---------- */
+.vh-avatar-sm {
+    width: 32px; height: 32px; font-size: 12px;
+    border-radius: 50%;
+    background: var(--vh-primary-light);
+    color: var(--vh-primary);
+    display: inline-flex; align-items: center; justify-content: center;
+    font-weight: 700;
+    flex-shrink: 0;
+}
+
+/* ---------- Badge muted (inactive/disabled state) ---------- */
+.vh-badge-muted { background: #F1F5F9; color: var(--vh-text-muted); }
+
+/* ---------- Empty state (alias for vh-empty) ---------- */
+.vh-empty-state {
+    display: flex; flex-direction: column; align-items: center;
+    justify-content: center;
+    padding: 60px 24px;
+    text-align: center;
+    color: var(--vh-text-muted);
+}
+.vh-empty-state .vh-empty-icon { font-size: 48px; margin-bottom: 14px; display: block; opacity: 0.5; }
+.vh-empty-state .vh-empty-text { font-size: 15px; margin-bottom: 20px; }
+
+/* ---------- Table actions column ---------- */
+.vh-table-actions {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: nowrap;
+}
+
+/* ---------- Breadcrumb separator ---------- */
+.vh-breadcrumb-sep {
+    color: var(--vh-text-muted);
+    font-size: 13px;
+    margin: 0 2px;
+    opacity: 0.6;
+}
+
+/* ---------- Progress wrap / label (Admin ProjectDetail) ---------- */
+.vh-progress-wrap {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    min-width: 120px;
+}
+.vh-progress-label {
+    font-size: 12px;
+    color: var(--vh-text-muted);
+    font-weight: 500;
+}
+
+/* ---------- Project cards (Volunteer/Projects, Volunteer/MyProjects) ---------- */
+.vh-project-card {
+    background: var(--vh-card-bg);
+    border: 1px solid var(--vh-border);
+    border-radius: var(--vh-radius);
+    box-shadow: var(--vh-shadow-sm);
+    display: flex;
+    flex-direction: column;
+    transition: transform var(--vh-transition), box-shadow var(--vh-transition);
+    overflow: hidden;
+}
+.vh-project-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--vh-shadow);
+}
+.vh-project-card-header {
+    padding: 16px 20px 12px;
+    border-bottom: 1px solid var(--vh-border);
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 10px;
+}
+.vh-project-card-title {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--vh-text);
+    margin: 0;
+    line-height: 1.3;
+}
+.vh-project-card-desc {
+    font-size: 13.5px;
+    color: var(--vh-text-muted);
+    padding: 12px 20px;
+    flex: 1;
+    line-height: 1.55;
+}
+.vh-project-card-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    padding: 0 20px 12px;
+    font-size: 13px;
+    color: var(--vh-text-secondary);
+}
+.vh-project-card-meta i { color: var(--vh-primary); opacity: 0.75; }
+.vh-project-card-footer {
+    padding: 12px 20px;
+    border-top: 1px solid var(--vh-border);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: #FAFBFC;
+}
+
+/* ---------- Volunteer dashboard mini project list ---------- */
+.vh-project-mini-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--vh-border);
+}
+.vh-project-mini-row:last-child { border-bottom: none; }
+.vh-project-mini-info {
+    flex: 1;
+    min-width: 0;
+}
+.vh-project-mini-info .vh-project-name {
+    font-size: 13.5px;
+    font-weight: 600;
+    color: var(--vh-text);
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.vh-project-mini-info .vh-project-hours {
+    font-size: 12px;
+    color: var(--vh-text-muted);
+    margin-top: 2px;
+}
+
+/* ---------- Project detail sidebar info panel ---------- */
+.vh-info-list { display: flex; flex-direction: column; gap: 12px; }
+.vh-info-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 8px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--vh-border);
+}
+.vh-info-item:last-child { border-bottom: none; padding-bottom: 0; }
+.vh-info-label {
+    font-size: 12.5px;
+    font-weight: 600;
+    color: var(--vh-text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+}
+.vh-info-value {
+    font-size: 13.5px;
+    font-weight: 600;
+    color: var(--vh-text);
+    text-align: right;
+}
+
+/* ---------- Profile header (Admin/VolunteerDetail) ---------- */
+.vh-profile-header {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 20px 24px;
+    background: var(--vh-card-bg);
+    border: 1px solid var(--vh-border);
+    border-radius: var(--vh-radius);
+    box-shadow: var(--vh-shadow-sm);
+    margin-bottom: 24px;
+}
+.vh-profile-avatar {
+    width: 64px; height: 64px;
+    border-radius: 50%;
+    background: var(--vh-primary-light);
+    color: var(--vh-primary);
+    display: inline-flex; align-items: center; justify-content: center;
+    font-size: 22px; font-weight: 700;
+    flex-shrink: 0;
+}
+.vh-profile-info { flex: 1; min-width: 0; }
+.vh-profile-info .vh-profile-name {
+    font-size: 18px; font-weight: 700; color: var(--vh-text);
+    margin: 0 0 4px;
+}
+.vh-profile-info .vh-profile-email {
+    font-size: 13.5px; color: var(--vh-text-muted);
+}
+
+/* ---------- User row (name + email cell in table) ---------- */
+.vh-user-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.vh-user-row .vh-user-info { min-width: 0; }
+.vh-user-row .vh-user-name {
+    font-size: 14px; font-weight: 600; color: var(--vh-text);
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.vh-user-row .vh-user-email {
+    font-size: 12.5px; color: var(--vh-text-muted);
+}
+
+/* ---------- Counter animation hook ---------- */
+.vh-counter { display: inline-block; }
+
+/* ---------- vh-page-desc alias (already defined above, kept for clarity) ---------- */
+/* .vh-page-desc already defined earlier in this file */

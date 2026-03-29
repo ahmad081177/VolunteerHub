@@ -18,9 +18,11 @@ namespace VolunteerHub.Pages.Volunteer
         {
             if (!IsPostBack)
             {
-                // Show success banner after redirect from LogEvent
+                // Show success banner after redirect from LogEvent or EditEvent
                 if (Request.QueryString["success"] == "1")
                     litAlert.Text = "<div class=\"vh-alert vh-alert-success\"><i class=\"bi bi-check-circle\"></i> Hours logged successfully!</div>";
+                else if (Request.QueryString["saved"] == "1")
+                    litAlert.Text = "<div class=\"vh-alert vh-alert-success\"><i class=\"bi bi-check-circle\"></i> Event updated successfully!</div>";
 
                 BindEvents();
             }

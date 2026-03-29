@@ -59,6 +59,35 @@ namespace VolunteerHub.DAL
             return list;
         }
 
+        /// <summary>Returns only active workspaces. Uses SQL filter to avoid C# YESNO conversion edge-cases.</summary>
+        public static List<Workspace> GetAllActive()
+        {
+            const string sql = "SELECT * FROM Workspaces WHERE IsActive = TRUE ORDER BY Name";
+            var list = new List<Workspace>();
+            using (var conn = DbHelper.GetConnection())
+            using (var cmd  = new OleDbCommand(sql, conn))
+            using (var r    = cmd.ExecuteReader())
+                while (r.Read()) list.Add(MapReader(r));
+            return list;
+        }
+
+        /// <summary>
+        /// Finds a single active workspace by code. TRIM+UCASE applied in SQL to tolerate
+        /// any accidental whitespace or casing differences in stored values.
+        /// Returns null if not found or inactive.
+        /// </summary>
+        public static Workspace GetActiveByCode(string code)
+        {
+            const string sql = "SELECT * FROM Workspaces WHERE TRIM(UCASE(Code)) = ? AND IsActive = TRUE";
+            using (var conn = DbHelper.GetConnection())
+            using (var cmd  = new OleDbCommand(sql, conn))
+            {
+                cmd.Parameters.Add("@c", OleDbType.VarChar).Value = code.Trim().ToUpperInvariant();
+                using (var r = cmd.ExecuteReader())
+                    return r.Read() ? MapReader(r) : null;
+            }
+        }
+
         public static Workspace GetById(int id)
         {
             const string sql = "SELECT * FROM Workspaces WHERE Id = ?";

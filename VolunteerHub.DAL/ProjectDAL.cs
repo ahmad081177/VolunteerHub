@@ -154,5 +154,35 @@ namespace VolunteerHub.DAL
                 return Convert.ToInt32(cmd.ExecuteScalar());
             }
         }
+
+        /// <summary>
+        /// Deletes a project and all its associated events and volunteer enrollments.
+        /// WorkspaceId is included as a security guard to prevent cross-workspace deletion.
+        /// </summary>
+        public static void Delete(int id, int workspaceId)
+        {
+            using (var conn = DbHelper.GetConnection())
+            {
+                // Delete dependent events first
+                using (var cmd = new OleDbCommand("DELETE FROM Events WHERE ProjectId = ?", conn))
+                {
+                    cmd.Parameters.Add("@pid", OleDbType.Integer).Value = id;
+                    cmd.ExecuteNonQuery();
+                }
+                // Delete volunteer enrollment records
+                using (var cmd = new OleDbCommand("DELETE FROM VolunteerProject WHERE ProjectId = ?", conn))
+                {
+                    cmd.Parameters.Add("@pid", OleDbType.Integer).Value = id;
+                    cmd.ExecuteNonQuery();
+                }
+                // Delete the project itself (WorkspaceId guard prevents cross-workspace deletion)
+                using (var cmd = new OleDbCommand("DELETE FROM Projects WHERE Id = ? AND WorkspaceId = ?", conn))
+                {
+                    cmd.Parameters.Add("@id", OleDbType.Integer).Value = id;
+                    cmd.Parameters.Add("@wi", OleDbType.Integer).Value = workspaceId;
+                    cmd.ExecuteNonQuery();
+                }
+            }
+        }
     }
 }

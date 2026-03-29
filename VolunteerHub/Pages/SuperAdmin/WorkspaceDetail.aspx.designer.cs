@@ -13,6 +13,7 @@ namespace VolunteerHub.Pages.SuperAdmin
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl pageSubtitle;
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl statVolunteers;
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl statProjects;
+        protected global::System.Web.UI.WebControls.Literal litAlert;
         protected global::System.Web.UI.WebControls.GridView gvAdmins;
         protected global::System.Web.UI.WebControls.GridView gvVolunteers;
     }

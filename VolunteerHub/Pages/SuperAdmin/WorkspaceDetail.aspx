@@ -39,13 +39,15 @@
     <div class="vh-card mb-4">
         <div class="vh-card-header">
             <h2 class="vh-card-title"><i class="bi bi-shield-check"></i> Administrators</h2>
-            <a href='<%# "~/Pages/SuperAdmin/CreateAdmin.aspx?wsId=" + Request.QueryString["id"] %>' class="btn vh-btn-primary btn-sm">
+            <a href='<%= ResolveUrl("~/Pages/SuperAdmin/CreateAdmin.aspx") + "?wsId=" + Request.QueryString["id"] %>' class="btn vh-btn-primary btn-sm">
                 <i class="bi bi-plus-lg"></i> Add Admin
             </a>
         </div>
         <div class="vh-card-body p-0">
+            <asp:Literal ID="litAlert" runat="server"></asp:Literal>
             <asp:GridView ID="gvAdmins" runat="server" AutoGenerateColumns="false"
-                CssClass="vh-table" GridLines="None" EmptyDataText="No administrators yet.">
+                CssClass="vh-table" GridLines="None" EmptyDataText="No administrators yet."
+                OnRowCommand="gvAdmins_RowCommand">
                 <Columns>
                     <asp:TemplateField HeaderText="Name">
                         <ItemTemplate>
@@ -64,6 +66,31 @@
                         </ItemTemplate>
                     </asp:TemplateField>
                     <asp:BoundField DataField="LastLoginAt" HeaderText="Last Login" DataFormatString="{0:MMM dd, yyyy}" NullDisplayText="Never" />
+                    <asp:TemplateField HeaderText="Actions" ItemStyle-CssClass="vh-table-actions">
+                        <ItemTemplate>
+                            <div class="d-flex gap-1">
+                                <a href='<%# ResolveUrl("~/Pages/SuperAdmin/EditAdmin.aspx") + "?id=" + Eval("Id") %>'
+                                   class="btn btn-sm vh-btn-outline" title="View / Edit">
+                                    <i class="bi bi-pencil"></i>
+                                </a>
+                                <asp:LinkButton CommandName="Toggle"
+                                    CommandArgument='<%# Eval("Id") + "," + Eval("IsActive") %>'
+                                    CssClass='<%# "btn btn-sm " + ((bool)Eval("IsActive") ? "vh-btn-danger" : "vh-btn-outline") %>'
+                                    runat="server"
+                                    title='<%# (bool)Eval("IsActive") ? "Deactivate" : "Activate" %>'
+                                    OnClientClick="return confirm('Toggle this administrator\'s status?')">
+                                    <i class='<%# (bool)Eval("IsActive") ? "bi bi-slash-circle" : "bi bi-check-circle" %>'></i>
+                                </asp:LinkButton>
+                                <asp:LinkButton CommandName="Delete"
+                                    CommandArgument='<%# Eval("Id") %>'
+                                    CssClass="btn btn-sm vh-btn-danger"
+                                    runat="server" title="Delete"
+                                    OnClientClick="return confirm('Permanently delete this administrator? This cannot be undone.')">
+                                    <i class="bi bi-trash"></i>
+                                </asp:LinkButton>
+                            </div>
+                        </ItemTemplate>
+                    </asp:TemplateField>
                 </Columns>
             </asp:GridView>
         </div>

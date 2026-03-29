@@ -15,5 +15,9 @@ namespace VolunteerHub.Pages.Admin
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl statActive;
         protected global::System.Web.UI.WebControls.GridView gvProjects;
         protected global::System.Web.UI.WebControls.Literal litChartScript;
+        protected global::System.Web.UI.WebControls.Panel pnlHrsChart;
+        protected global::System.Web.UI.WebControls.Panel pnlHrsEmpty;
+        protected global::System.Web.UI.WebControls.Panel pnlVolsChart;
+        protected global::System.Web.UI.WebControls.Panel pnlVolsEmpty;
     }
 }

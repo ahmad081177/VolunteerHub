@@ -48,15 +48,25 @@ namespace VolunteerHub.Pages.Admin
             var sb = new StringBuilder("<script>\n");
             if (hrsData.Count > 0)
             {
+                pnlHrsChart.Visible = true;  pnlHrsEmpty.Visible = false;
                 var labels = JsonConvert.SerializeObject(hrsData.ConvertAll(x => x.Title));
                 var data   = JsonConvert.SerializeObject(hrsData.ConvertAll(x => x.Hours));
                 sb.AppendLine($"VH.barChart('chartHoursPerProject', {labels}, {data}, 'Hours');");
             }
+            else
+            {
+                pnlHrsChart.Visible = false; pnlHrsEmpty.Visible = true;
+            }
             if (volsData.Count > 0)
             {
+                pnlVolsChart.Visible = true;  pnlVolsEmpty.Visible = false;
                 var labels = JsonConvert.SerializeObject(volsData.ConvertAll(x => x.Title));
                 var data   = JsonConvert.SerializeObject(volsData.ConvertAll(x => x.Count));
                 sb.AppendLine($"VH.barChart('chartVolsPerProject', {labels}, {data}, 'Volunteers');");
+            }
+            else
+            {
+                pnlVolsChart.Visible = false; pnlVolsEmpty.Visible = true;
             }
             sb.AppendLine("</script>");
             litChartScript.Text = sb.ToString();

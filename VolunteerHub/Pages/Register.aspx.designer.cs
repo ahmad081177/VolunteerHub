@@ -16,7 +16,7 @@ namespace VolunteerHub.Pages
         protected global::System.Web.UI.WebControls.TextBox txtConfirm;
         protected global::System.Web.UI.WebControls.DropDownList ddlGender;
         protected global::System.Web.UI.WebControls.TextBox txtDob;
-        protected global::System.Web.UI.WebControls.TextBox txtWorkspaceCode;
+        protected global::System.Web.UI.WebControls.DropDownList ddlWorkspaceCode;
         protected global::System.Web.UI.WebControls.Button btnRegister;
     }
 }

@@ -13,7 +13,7 @@
             <p class="vh-page-desc" id="pageMeta" runat="server"></p>
         </div>
         <div class="d-flex gap-2">
-            <a href='<%= "~/Pages/Admin/EditProject.aspx?id=" + Request.QueryString["id"] %>'
+            <a href='<%= ResolveUrl("~/Pages/Admin/EditProject.aspx") + "?id=" + Request.QueryString["id"] %>'
                class="btn vh-btn-ghost"><i class="bi bi-pencil"></i> Edit</a>
             <a href="<%= ResolveUrl("~/Pages/Admin/Projects.aspx") %>" class="btn vh-btn-outline">
                 <i class="bi bi-arrow-left"></i> Back

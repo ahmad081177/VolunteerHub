@@ -64,6 +64,22 @@
         });
     }
 
+    // Global helpers called by onclick attributes in DashboardMaster
+    window.toggleSidebar = function () {
+        var sidebar = document.getElementById('vhSidebar');
+        var overlay = document.getElementById('sidebarOverlay');
+        if (!sidebar) return;
+        var isOpen = sidebar.classList.toggle('open');
+        if (overlay) overlay.classList.toggle('show', isOpen);
+    };
+
+    window.closeSidebar = function () {
+        var sidebar = document.getElementById('vhSidebar');
+        var overlay = document.getElementById('sidebarOverlay');
+        if (sidebar) sidebar.classList.remove('open');
+        if (overlay) overlay.classList.remove('show');
+    };
+
     // ── Number counter animation for stat cards ───────────────
     function animateCounters() {
         document.querySelectorAll('[data-count]').forEach(function (el) {

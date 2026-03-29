@@ -36,11 +36,19 @@ namespace VolunteerHub.DAL
 
         public static bool EmailExists(string email)
         {
-            const string sql = "SELECT COUNT(*) FROM AppUser WHERE Email = ?";
+            // Convenience overload — used when creating a brand-new account (no exclusion needed)
+            return EmailExists(email, 0);
+        }
+
+        public static bool EmailExists(string email, int excludeId)
+        {
+            // excludeId = 0 means "exclude no one" (Access COUNTER IDs start at 1)
+            const string sql = "SELECT COUNT(*) FROM AppUser WHERE Email = ? AND Id <> ?";
             using (var conn = DbHelper.GetConnection())
             using (var cmd  = new OleDbCommand(sql, conn))
             {
-                cmd.Parameters.AddWithValue("@e", email);
+                cmd.Parameters.Add("@e",  OleDbType.VarChar).Value  = email;
+                cmd.Parameters.Add("@id", OleDbType.Integer).Value  = excludeId;
                 return Convert.ToInt32(cmd.ExecuteScalar()) > 0;
             }
         }
@@ -187,6 +195,40 @@ namespace VolunteerHub.DAL
             {
                 cmd.Parameters.Add("@a",  OleDbType.Boolean).Value = active;
                 cmd.Parameters.Add("@id", OleDbType.Integer).Value = id;
+                cmd.ExecuteNonQuery();
+            }
+        }
+
+        public static void Delete(int id)
+        {
+            // Hard delete — removes the admin account permanently.
+            // WHERE Role='Admin' prevents accidentally deleting SuperAdmin or Volunteer accounts.
+            const string sql = "DELETE FROM AppUser WHERE Id=? AND Role='Admin'";
+            using (var conn = DbHelper.GetConnection())
+            using (var cmd  = new OleDbCommand(sql, conn))
+            {
+                cmd.Parameters.Add("@id", OleDbType.Integer).Value = id;
+                cmd.ExecuteNonQuery();
+            }
+        }
+
+        public static void UpdateAdmin(AppUser u)
+        {
+            // Updates only the fields an administrator's profile exposes: name, email, workspace, active flag.
+            // PasswordHash and Role are deliberately excluded to prevent privilege escalation.
+            const string sql = @"UPDATE AppUser
+                SET FirstName=?, LastName=?, Email=?, WorkspaceId=?, IsActive=?
+                WHERE Id=? AND Role='Admin'";
+            using (var conn = DbHelper.GetConnection())
+            using (var cmd  = new OleDbCommand(sql, conn))
+            {
+                cmd.Parameters.Add("@fn", OleDbType.VarChar).Value  = u.FirstName;
+                cmd.Parameters.Add("@ln", OleDbType.VarChar).Value  = u.LastName;
+                cmd.Parameters.Add("@em", OleDbType.VarChar).Value  = u.Email;
+                var wiParam = cmd.Parameters.Add("@wi", OleDbType.Integer);
+                wiParam.Value = u.WorkspaceId.HasValue ? (object)u.WorkspaceId.Value : DBNull.Value;
+                cmd.Parameters.Add("@ac", OleDbType.Boolean).Value  = u.IsActive;
+                cmd.Parameters.Add("@id", OleDbType.Integer).Value  = u.Id;
                 cmd.ExecuteNonQuery();
             }
         }

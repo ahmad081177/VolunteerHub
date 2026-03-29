@@ -1,4 +1,5 @@
 using System;
+using System.Web.UI.WebControls;
 using VolunteerHub.Base;
 using VolunteerHub.DAL;
 
@@ -11,6 +12,25 @@ namespace VolunteerHub.Pages.SuperAdmin
         protected void Page_Load(object sender, EventArgs e)
         {
             if (!IsPostBack) BindData();
+        }
+
+        protected void gvAdmins_RowCommand(object sender, GridViewCommandEventArgs e)
+        {
+            if (e.CommandName == "Toggle")
+            {
+                var parts   = e.CommandArgument.ToString().Split(',');
+                int uid     = int.Parse(parts[0]);
+                bool current = bool.Parse(parts[1]);
+                UserDAL.SetIsActive(uid, !current);
+                litAlert.Text = $"<div class=\"vh-alert vh-alert-success\">Administrator {(current ? "deactivated" : "activated")} successfully.</div>";
+            }
+            else if (e.CommandName == "Delete")
+            {
+                int uid = int.Parse(e.CommandArgument.ToString());
+                UserDAL.Delete(uid);
+                litAlert.Text = "<div class=\"vh-alert vh-alert-success\">Administrator deleted.</div>";
+            }
+            BindData();
         }
 
         private void BindData()

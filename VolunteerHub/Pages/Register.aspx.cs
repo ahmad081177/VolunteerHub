@@ -1,6 +1,6 @@
 using System;
-using System.Web;
 using System.Web.UI;
+using System.Web.UI.WebControls;
 using VolunteerHub.DAL;
 using VolunteerHub.Helpers;
 using VolunteerHub.Models;
@@ -11,8 +11,15 @@ namespace VolunteerHub.Pages
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-            if (!IsPostBack && Session["UserId"] != null)
+            if (Session["UserId"] != null)
                 Response.Redirect("~/Pages/Login.aspx", true);
+
+            if (!IsPostBack)
+            {
+                ddlWorkspaceCode.Items.Add(new ListItem("-- Select your workspace --", ""));
+                foreach (var ws in WorkspaceDAL.GetAllActive())
+                    ddlWorkspaceCode.Items.Add(new ListItem($"{ws.Name}  ({ws.Code})", ws.Code));
+            }
         }
 
         protected void btnRegister_Click(object sender, EventArgs e)
@@ -27,19 +34,13 @@ namespace VolunteerHub.Pages
                 return;
             }
 
-            // Look up the entered code against all active workspaces.
-            // We fetch all then compare in C# so the match is always case-insensitive,
-            // regardless of the Access database's collation setting.
-            var code = txtWorkspaceCode.Text.Trim().ToUpperInvariant();
-            var allWs = WorkspaceDAL.GetAll();
-            Models.Workspace workspace = null;
-            foreach (var w in allWs)
-                if (string.Equals(w.Code, code, StringComparison.OrdinalIgnoreCase) && w.IsActive)
-                { workspace = w; break; }
+            // Look up workspace by the selected dropdown code via direct SQL (bypasses C# YESNO conversion issues).
+            var code = ddlWorkspaceCode.SelectedValue.Trim();
+            var workspace = WorkspaceDAL.GetActiveByCode(code);
 
             if (workspace == null)
             {
-                litAlert.Text = "<div class=\"vh-alert vh-alert-danger\"><i class=\"bi bi-x-circle\"></i> Workspace code not found or inactive. Please check with your administrator.</div>";
+                litAlert.Text = "<div class=\"vh-alert vh-alert-danger\"><i class=\"bi bi-x-circle-fill\"></i> Workspace not found or inactive. Please check with your administrator.</div>";
                 return;
             }
 

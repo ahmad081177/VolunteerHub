@@ -52,9 +52,17 @@
                     <h2 class="vh-card-title"><i class="bi bi-bar-chart-fill"></i> Hours per Project</h2>
                 </div>
                 <div class="vh-card-body">
-                    <div class="vh-chart-container">
-                        <canvas id="chartHoursPerProject"></canvas>
-                    </div>
+                    <asp:Panel ID="pnlHrsChart" runat="server">
+                        <div class="vh-chart-container">
+                            <canvas id="chartHoursPerProject"></canvas>
+                        </div>
+                    </asp:Panel>
+                    <asp:Panel ID="pnlHrsEmpty" runat="server" Visible="false">
+                        <div class="vh-empty-state py-4">
+                            <i class="bi bi-bar-chart vh-empty-icon"></i>
+                            <p class="vh-empty-text">No hours logged yet.</p>
+                        </div>
+                    </asp:Panel>
                 </div>
             </div>
         </div>
@@ -64,9 +72,17 @@
                     <h2 class="vh-card-title"><i class="bi bi-people"></i> Volunteers per Project</h2>
                 </div>
                 <div class="vh-card-body">
-                    <div class="vh-chart-container">
-                        <canvas id="chartVolsPerProject"></canvas>
-                    </div>
+                    <asp:Panel ID="pnlVolsChart" runat="server">
+                        <div class="vh-chart-container">
+                            <canvas id="chartVolsPerProject"></canvas>
+                        </div>
+                    </asp:Panel>
+                    <asp:Panel ID="pnlVolsEmpty" runat="server" Visible="false">
+                        <div class="vh-empty-state py-4">
+                            <i class="bi bi-people vh-empty-icon"></i>
+                            <p class="vh-empty-text">No volunteers enrolled yet.</p>
+                        </div>
+                    </asp:Panel>
                 </div>
             </div>
         </div>

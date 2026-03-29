@@ -21,11 +21,17 @@ namespace VolunteerHub.Pages.SuperAdmin
             public bool      IsActive      { get; set; }
             public DateTime? LastLoginAt   { get; set; }
             public string    WorkspaceName { get; set; }
+            public int?      WorkspaceId   { get; set; }
         }
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            if (!IsPostBack) BindGrid();
+            if (!IsPostBack)
+            {
+                if (Request.QueryString["saved"] == "1")
+                    litAlert.Text = "<div class=\"vh-alert vh-alert-success\"><i class=\"bi bi-check-circle\"></i> Administrator updated successfully.</div>";
+                BindGrid();
+            }
         }
 
         private void BindGrid()
@@ -39,14 +45,15 @@ namespace VolunteerHub.Pages.SuperAdmin
             foreach (var a in admins)
                 rows.Add(new AdminRow
                 {
-                    Id           = a.Id,
-                    FullName     = a.FullName,
-                    Initials     = a.Initials,
-                    Email        = a.Email,
-                    IsActive     = a.IsActive,
-                    LastLoginAt  = a.LastLoginAt,
+                    Id            = a.Id,
+                    FullName      = a.FullName,
+                    Initials      = a.Initials,
+                    Email         = a.Email,
+                    IsActive      = a.IsActive,
+                    LastLoginAt   = a.LastLoginAt,
                     WorkspaceName = a.WorkspaceId.HasValue && wMap.ContainsKey(a.WorkspaceId.Value)
-                                   ? wMap[a.WorkspaceId.Value] : null
+                                    ? wMap[a.WorkspaceId.Value] : null,
+                    WorkspaceId   = a.WorkspaceId
                 });
 
             gvAdmins.DataSource = rows;

@@ -57,11 +57,17 @@
                     <asp:BoundField DataField="Notes"        HeaderText="Notes"   NullDisplayText="—" />
                     <asp:TemplateField HeaderText="" ItemStyle-CssClass="vh-table-actions">
                         <ItemTemplate>
-                            <asp:LinkButton CommandName="Delete" CommandArgument='<%# Eval("Id") %>'
-                                CssClass="btn vh-btn-danger btn-sm"
-                                runat="server" OnClientClick="return confirm('Delete this event?')">
-                                <i class="bi bi-trash"></i>
-                            </asp:LinkButton>
+                            <div class="d-flex gap-1">
+                                <a href='<%# ResolveUrl("~/Pages/Volunteer/EditEvent.aspx") + "?id=" + Eval("Id") %>'
+                                   class="btn btn-sm vh-btn-outline" title="Edit">
+                                    <i class="bi bi-pencil"></i>
+                                </a>
+                                <asp:LinkButton CommandName="Delete" CommandArgument='<%# Eval("Id") %>'
+                                    CssClass="btn btn-sm vh-btn-danger"
+                                    runat="server" OnClientClick="return confirm('Delete this event?')">
+                                    <i class="bi bi-trash"></i>
+                                </asp:LinkButton>
+                            </div>
                         </ItemTemplate>
                     </asp:TemplateField>
                 </Columns>

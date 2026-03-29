@@ -45,11 +45,23 @@
                     <asp:BoundField DataField="LastLoginAt" HeaderText="Last Login" DataFormatString="{0:MMM dd, yyyy}" NullDisplayText="Never" />
                     <asp:TemplateField HeaderText="Actions" ItemStyle-CssClass="vh-table-actions">
                         <ItemTemplate>
-                            <asp:LinkButton CommandName="Toggle" CommandArgument='<%# Eval("Id") + "," + Eval("IsActive") %>'
-                                CssClass='<%# "btn btn-sm " + ((bool)Eval("IsActive") ? "vh-btn-danger" : "vh-btn-outline") %>'
-                                runat="server" OnClientClick="return confirm('Toggle admin status?')">
-                                <%# (bool)Eval("IsActive") ? "Deactivate" : "Activate" %>
-                            </asp:LinkButton>
+                            <div class="d-flex gap-1">
+                                <a href='<%# ResolveUrl("~/Pages/SuperAdmin/EditAdmin.aspx") + "?id=" + Eval("Id") %>'
+                                   class="btn btn-sm vh-btn-outline" title="Edit">
+                                    <i class="bi bi-pencil"></i>
+                                </a>
+                                <asp:HyperLink ID="lnkWorkspace" runat="server"
+                                    NavigateUrl='<%# Eval("WorkspaceId") != null ? ResolveUrl("~/Pages/SuperAdmin/WorkspaceDetail.aspx") + "?id=" + Eval("WorkspaceId") : "#" %>'
+                                    Visible='<%# Eval("WorkspaceId") != null %>'
+                                    CssClass="btn btn-sm vh-btn-outline" title="View Workspace">
+                                    <i class="bi bi-building"></i>
+                                </asp:HyperLink>
+                                <asp:LinkButton CommandName="Toggle" CommandArgument='<%# Eval("Id") + "," + Eval("IsActive") %>'
+                                    CssClass='<%# "btn btn-sm " + ((bool)Eval("IsActive") ? "vh-btn-danger" : "vh-btn-outline") %>'
+                                    runat="server" OnClientClick="return confirm('Toggle admin status?')">
+                                    <%# (bool)Eval("IsActive") ? "Deactivate" : "Activate" %>
+                                </asp:LinkButton>
+                            </div>
                         </ItemTemplate>
                     </asp:TemplateField>
                 </Columns>

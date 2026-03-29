@@ -43,8 +43,6 @@
                             : (string)Eval("Status") == "Ended"
                               ? "<span class=\"vh-badge vh-badge-muted\">Project Ended</span>"
                               : "" %>
-                        <%# !(bool)Eval("IsEnrolled") && (string)Eval("Status") != "Ended"
-                            ? $"<asp:LinkButton runat='server'></asp:LinkButton>" : "" %>
                         <asp:LinkButton ID="btnJoin" runat="server"
                             CommandName="Join"
                             CommandArgument='<%# Eval("Id") %>'

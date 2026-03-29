@@ -40,7 +40,7 @@
             <div class="vh-card" id="myHoursCard" runat="server" visible="false">
                 <div class="vh-card-header">
                     <h2 class="vh-card-title"><i class="bi bi-clock-history"></i> My Hours</h2>
-                    <a href='<%# "~/Pages/Volunteer/LogEvent.aspx?projectId=" + Request.QueryString["id"] %>'
+                    <a href='<%= ResolveUrl("~/Pages/Volunteer/LogEvent.aspx") + "?projectId=" + Request.QueryString["id"] %>'
                        class="btn vh-btn-primary btn-sm"><i class="bi bi-plus"></i> Log Hours</a>
                 </div>
                 <div class="vh-card-body p-0">
