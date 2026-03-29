@@ -277,6 +277,7 @@
     <!-- AuthHelper moved to VolunteerHub.DAL\Helpers\AuthHelper.cs -->
     <!-- Only web-layer files remain here -->
     <Compile Include="Helpers\ImageHelper.cs" />
+    <Compile Include="Helpers\ProjectHelper.cs" />
     <!-- Base -->
     <Compile Include="Base\BasePage.cs">
       <SubType>ASPXCodeBehind</SubType>

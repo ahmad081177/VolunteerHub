@@ -79,5 +79,11 @@ namespace VolunteerHub.Base
                 lit.Text = $"<div class=\"vh-alert vh-alert-success\">{HttpUtility.HtmlEncode(message)}</div>";
             }
         }
+
+        // Called from .aspx data-binding expressions inside templates where the model no longer carries this.
+        protected string GetStatusBadgeClass(string status)
+        {
+            return Helpers.ProjectHelper.GetStatusBadgeClass(status);
+        }
     }
 }

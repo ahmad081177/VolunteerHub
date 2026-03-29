@@ -26,7 +26,7 @@
                     <asp:BoundField DataField="Title"     HeaderText="Project Title" />
                     <asp:TemplateField HeaderText="Status">
                         <ItemTemplate>
-                            <span class='<%# "vh-badge " + Eval("StatusBadgeClass") %>'><%# Eval("Status") %></span>
+                            <span class='<%# "vh-badge " + GetStatusBadgeClass((string)Eval("Status")) %>'><%# Eval("Status") %></span>
                         </ItemTemplate>
                     </asp:TemplateField>
                     <asp:BoundField DataField="Location"  HeaderText="Location"  NullDisplayText="—" />

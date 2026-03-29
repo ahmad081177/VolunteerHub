@@ -35,18 +35,5 @@ namespace VolunteerHub.Models
             }
         }
 
-        /// <summary>CSS class for the status badge used in the UI.</summary>
-        public string StatusBadgeClass
-        {
-            get
-            {
-                switch (Status)
-                {
-                    case "Active":   return "vh-badge-active";
-                    case "Upcoming": return "vh-badge-upcoming";
-                    default:         return "vh-badge-ended";
-                }
-            }
-        }
     }
 }

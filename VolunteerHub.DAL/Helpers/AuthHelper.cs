@@ -5,13 +5,9 @@ namespace VolunteerHub.Helpers
 {
     public static class AuthHelper
     {
-        // BCrypt work factor: 2^12 = 4 096 hashing rounds.
-        // Higher = slower to crack via brute force, but also slower to compute on login.
-        // 12 is the recommended minimum for production as of 2024.
-        private const int WorkFactor = 12;
-
+        // Use BCrypt's built-in default work factor — simple to read, good enough for school use.
         public static string HashPassword(string plain)
-            => BCrypt.Net.BCrypt.HashPassword(plain, WorkFactor);
+            => BCrypt.Net.BCrypt.HashPassword(plain);
 
         public static bool VerifyPassword(string plain, string hash)
         {

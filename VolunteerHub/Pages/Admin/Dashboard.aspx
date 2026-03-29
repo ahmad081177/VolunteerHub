@@ -101,7 +101,7 @@
                     <asp:BoundField DataField="Title" HeaderText="Project" />
                     <asp:TemplateField HeaderText="Status">
                         <ItemTemplate>
-                            <span class='<%# "vh-badge " + Eval("StatusBadgeClass") %>'><%# Eval("Status") %></span>
+                            <span class='<%# "vh-badge " + GetStatusBadgeClass((string)Eval("Status")) %>'><%# Eval("Status") %></span>
                         </ItemTemplate>
                     </asp:TemplateField>
                     <asp:BoundField DataField="StartDate" HeaderText="Start" DataFormatString="{0:MMM dd, yyyy}" />

@@ -28,7 +28,26 @@ namespace VolunteerHub.Models
 
         // Computed
         public string FullName => $"{FirstName} {LastName}";
-        public string Initials => (FirstName?.Length > 0 ? FirstName[0].ToString() : "") +
-                                  (LastName?.Length  > 0 ? LastName[0].ToString()  : "");
+
+        public string Initials
+        {
+            get
+            {
+                string first = "";
+                string last  = "";
+
+                if (FirstName != null && FirstName.Length > 0)
+                {
+                    first = FirstName[0].ToString();
+                }
+
+                if (LastName != null && LastName.Length > 0)
+                {
+                    last = LastName[0].ToString();
+                }
+
+                return first + last;
+            }
+        }
     }
 }

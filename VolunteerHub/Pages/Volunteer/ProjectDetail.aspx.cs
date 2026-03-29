@@ -37,7 +37,7 @@ namespace VolunteerHub.Pages.Volunteer
             breadcrumbTitle.InnerText = p.Title;
             pageMeta.InnerText        = $"{p.Location ?? "No location"}  •  {p.StartDate:MMM dd, yyyy} – {p.EndDate:MMM dd, yyyy}";
             statusBadge.InnerText     = p.Status;
-            statusBadge.Attributes["class"] = "vh-badge " + p.StatusBadgeClass;
+            statusBadge.Attributes["class"] = "vh-badge " + Helpers.ProjectHelper.GetStatusBadgeClass(p.Status);
 
             // --- Info panel ---
             infoStart.InnerText = p.StartDate.ToString("MMMM dd, yyyy");

@@ -60,7 +60,23 @@ namespace VolunteerHub.Pages
 
             UserDAL.Insert(user);
 
-            litAlert.Text = "<div class=\"vh-alert vh-alert-success\"><i class=\"bi bi-check-circle\"></i> Account created! <a href=\"Login.aspx\">Sign in now</a></div>";
+            // Redirect to login after 3 seconds. The JS countdown renders inside litAlert;
+            // the meta-refresh acts as a hard fallback if JS is disabled.
+            litAlert.Text = @"<div class=""vh-alert vh-alert-success"">
+                <i class=""bi bi-check-circle-fill""></i>
+                <span>Account created! Redirecting to sign in in <strong id=""cdCount"">3</strong>s…
+                <a href=""Login.aspx"">Sign in now</a></span>
+              </div>
+              <meta http-equiv=""refresh"" content=""3;url=Login.aspx"" />
+              <script>
+                (function(){var n=3,el=document.getElementById('cdCount');
+                 if(!el)return;
+                 var t=setInterval(function(){n--;if(el)el.textContent=n;if(n<=0)clearInterval(t);},1000);
+                })();
+              </script>";
+            // Disable the form so the user cannot accidentally submit again while wait is counting
+            btnRegister.Enabled = false;
+            ddlWorkspaceCode.Enabled = false;
         }
     }
 }

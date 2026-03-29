@@ -55,6 +55,11 @@
                     </asp:TemplateField>
                     <asp:BoundField DataField="HoursLogged"  HeaderText="Hours"   DataFormatString="{0:0.#}" />
                     <asp:BoundField DataField="Notes"        HeaderText="Notes"   NullDisplayText="—" />
+                    <asp:TemplateField HeaderText="Photos">
+                        <ItemTemplate>
+                            <%# BuildImageThumb((int)Eval("Id")) %>
+                        </ItemTemplate>
+                    </asp:TemplateField>
                     <asp:TemplateField HeaderText="" ItemStyle-CssClass="vh-table-actions">
                         <ItemTemplate>
                             <div class="d-flex gap-1">

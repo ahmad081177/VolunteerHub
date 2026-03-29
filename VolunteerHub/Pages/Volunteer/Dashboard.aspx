@@ -76,7 +76,7 @@
                                         <%# Eval("HoursLogged") %> / <%# Eval("HoursRequired") ?? "∞" %> hrs
                                     </div>
                                 </div>
-                                <span class='<%# "vh-badge " + Eval("StatusBadgeClass") %>'><%# Eval("Status") %></span>
+                                <span class='<%# "vh-badge " + GetStatusBadgeClass((string)Eval("Status")) %>'><%# Eval("Status") %></span>
                             </div>
                         </ItemTemplate>
                         <FooterTemplate>

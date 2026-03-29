@@ -1,6 +1,8 @@
 using System;
+using System.Web.UI.WebControls;
 using VolunteerHub.Base;
 using VolunteerHub.DAL;
+using VolunteerHub.Helpers;
 using VolunteerHub.Models;
 
 namespace VolunteerHub.Pages.Volunteer
@@ -25,23 +27,26 @@ namespace VolunteerHub.Pages.Volunteer
         }
 
         /// <summary>
-        /// Populates the project dropdown with projects the volunteer is enrolled in.
+        /// Populates the project dropdown with ALL active/upcoming projects in the volunteer's workspace.
+        /// (Enrollment is not required to log hours — volunteers log against any project they worked on.)
         /// Pre-selects the project if ?projectId= is present in the URL.
         /// </summary>
         private void BindProjects()
         {
-            int uid  = CurrentUserId;
-            var hoursMap = VolunteerProjectDAL.GetProjectsWithHours(uid);
+            int wsId = CurrentWorkspaceId ?? 0;
+            var projects = ProjectDAL.GetByWorkspace(wsId);
 
             ddlProject.Items.Clear();
             ddlProject.Items.Add(new System.Web.UI.WebControls.ListItem("-- Select Project --", ""));
 
-            foreach (var (projId, _) in hoursMap)
+            foreach (var p in projects)
             {
-                var p = ProjectDAL.GetById(projId);
-                if (p == null || p.Status == "Ended") continue;
+                if (p.Status == "Ended") continue;   // hide fully-ended projects
                 ddlProject.Items.Add(new System.Web.UI.WebControls.ListItem(p.Title, p.Id.ToString()));
             }
+
+            if (ddlProject.Items.Count == 1)   // only placeholder
+                litAlert.Text = "<div class=\"vh-alert vh-alert-info\"><i class=\"bi bi-info-circle\"></i> No active projects found in your workspace yet.</div>";
 
             // Pre-select from query string
             var qsId = Request.QueryString["projectId"];
@@ -63,11 +68,11 @@ namespace VolunteerHub.Pages.Volunteer
                 return;
             }
 
-            // Server-side enrollment check — verifies the volunteer is genuinely enrolled
-            // in this project even if the browser payload was tampered with (forged POST).
-            if (!VolunteerProjectDAL.IsEnrolled(CurrentUserId, projectId))
+            // Server-side: just verify the project belongs to this volunteer's workspace
+            var proj = ProjectDAL.GetById(projectId);
+            if (proj == null || proj.WorkspaceId != (CurrentWorkspaceId ?? 0))
             {
-                litAlert.Text = "<div class=\"vh-alert vh-alert-danger\">You are not enrolled in this project.</div>";
+                litAlert.Text = "<div class=\"vh-alert vh-alert-danger\">Invalid project selection.</div>";
                 return;
             }
 
@@ -103,7 +108,29 @@ namespace VolunteerHub.Pages.Volunteer
                 Notes       = string.IsNullOrWhiteSpace(txtNotes.Text)     ? null : txtNotes.Text.Trim(),
                 LoggedAt    = DateTime.UtcNow
             };
-            EventDAL.Insert(ev);
+            int eventId = EventDAL.Insert(ev);
+
+            // Save uploaded images (up to 5) if the EventImages table exists
+            if (EventImageDAL.TableExists())
+            {
+                var files = Request.Files;
+                int saved = 0;
+                for (int i = 0; i < files.Count && saved < 5; i++)
+                {
+                    var file = files[i];
+                    if (file == null || file.ContentLength == 0) continue;
+                    try
+                    {
+                        string path = ImageHelper.SaveUpload(file, "EventImages");
+                        if (path != null)
+                        {
+                            EventImageDAL.Insert(eventId, path, saved);
+                            saved++;
+                        }
+                    }
+                    catch { /* skip invalid files silently */ }
+                }
+            }
 
             Response.Redirect("~/Pages/Volunteer/MyEvents.aspx?success=1", true);
         }

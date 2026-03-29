@@ -58,7 +58,6 @@ namespace VolunteerHub.Pages.Volunteer
                 {
                     Title         = p.Title,
                     Status        = p.Status,
-                    StatusBadgeClass = p.StatusBadgeClass,
                     HoursLogged   = hrs,
                     HoursRequired = p.HoursRequired
                 });
@@ -83,7 +82,6 @@ namespace VolunteerHub.Pages.Volunteer
         {
             public string   Title            { get; set; }
             public string   Status           { get; set; }
-            public string   StatusBadgeClass { get; set; }
             public decimal  HoursLogged      { get; set; }
             public decimal? HoursRequired    { get; set; }
         }

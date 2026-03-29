@@ -209,4 +209,26 @@ if ($userCount -gt 0) {
 }
 $conn.Close(); $conn.Dispose()
 
+# ── EventImages ──────────────────────────────────────────────────────────────
+$conn = NewConn
+if (TableExists $conn "EventImages") {
+    Write-Host "EventImages      — already exists, skipped." -ForegroundColor Yellow
+    $conn.Close(); $conn.Dispose()
+} else {
+    Exec $conn @"
+CREATE TABLE EventImages (
+    Id         COUNTER  CONSTRAINT PK_EventImages PRIMARY KEY,
+    EventId    LONG     NOT NULL,
+    ImagePath  TEXT(255) NOT NULL,
+    SortOrder  LONG     NOT NULL,
+    UploadedAt DATETIME NOT NULL
+)
+"@
+    $conn.Close(); $conn.Dispose()
+    $conn = NewConn
+    Exec $conn "CREATE INDEX IX_EventImages_EventId ON EventImages (EventId)"
+    $conn.Close(); $conn.Dispose()
+    Write-Host "EventImages      — created." -ForegroundColor Green
+}
+
 Write-Host "`nDatabase initialization complete." -ForegroundColor Cyan

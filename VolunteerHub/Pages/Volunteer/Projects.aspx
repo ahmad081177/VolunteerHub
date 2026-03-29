@@ -22,7 +22,7 @@
             <div class="col-md-6 col-xl-4">
                 <div class="vh-project-card">
                     <div class="vh-project-card-header">
-                        <span class='<%# "vh-badge " + Eval("StatusBadgeClass") %>'><%# Eval("Status") %></span>
+                        <span class='<%# "vh-badge " + GetStatusBadgeClass((string)Eval("Status")) %>'><%# Eval("Status") %></span>
                         <span class="text-muted small"><%# Eval("Location") ?? "" %></span>
                     </div>
                     <h3 class="vh-project-card-title"><%# Eval("Title") %></h3>

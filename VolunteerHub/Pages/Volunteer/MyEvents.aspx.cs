@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Text;
 using System.Web.UI.WebControls;
 using VolunteerHub.Base;
 using VolunteerHub.DAL;
@@ -55,6 +57,29 @@ namespace VolunteerHub.Pages.Volunteer
             // UserId guard is inside EventDAL.Delete — cannot delete another user's events
             EventDAL.Delete(id, CurrentUserId);
             BindEvents();
+        }
+
+        /// <summary>
+        /// Returns inline HTML showing the first image thumbnail for an event, plus a "+N" badge if there are more.
+        /// Called from the Photos TemplateField in the GridView.
+        /// Gracefully returns "—" if the EventImages table doesn't exist yet (pre-migration DBs).
+        /// </summary>
+        protected string BuildImageThumb(int eventId)
+        {
+            if (!EventImageDAL.TableExists()) return "<span class=\"text-muted\">—</span>";
+            var imgs = EventImageDAL.GetByEvent(eventId);
+            if (imgs.Count == 0) return "<span class=\"text-muted\">—</span>";
+
+            var sb = new StringBuilder();
+            sb.Append("<div class=\"d-flex align-items-center gap-1\">");
+            // Show first thumbnail
+            string first = ResolveUrl(imgs[0]);
+            sb.Append($"<img src=\"{System.Web.HttpUtility.HtmlAttributeEncode(first)}\" " +
+                       "style=\"width:36px;height:36px;object-fit:cover;border-radius:6px;border:1px solid #E2E8F0;\" />");
+            if (imgs.Count > 1)
+                sb.Append($"<span class=\"vh-badge vh-badge-gray\">+{imgs.Count - 1}</span>");
+            sb.Append("</div>");
+            return sb.ToString();
         }
     }
 }
