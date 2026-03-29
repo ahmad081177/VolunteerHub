@@ -16,6 +16,9 @@ namespace VolunteerHub.Pages.Volunteer
         protected global::System.Web.UI.WebControls.TextBox txtEndTime;
         protected global::System.Web.UI.WebControls.TextBox txtHours;
         protected global::System.Web.UI.WebControls.TextBox txtNotes;
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl existingPhotosSection;
+        protected global::System.Web.UI.WebControls.HiddenField hfDeleteImageIds;
+        protected global::System.Web.UI.WebControls.Repeater rptExistingImages;
         protected global::System.Web.UI.WebControls.Button btnSave;
     }
 }

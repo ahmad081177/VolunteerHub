@@ -53,7 +53,10 @@ namespace VolunteerHub.Pages.Volunteer
         protected void gvEvents_RowCommand(object sender, GridViewCommandEventArgs e)
         {
             if (e.CommandName != "Delete") return;
-            int id = int.Parse(e.CommandArgument.ToString());
+            int id;
+            if (!int.TryParse(e.CommandArgument?.ToString(), out id) || id <= 0) return;
+            // Delete associated images first (Access doesn't enforce FK cascades)
+            if (EventImageDAL.TableExists()) EventImageDAL.DeleteByEvent(id);
             // UserId guard is inside EventDAL.Delete — cannot delete another user's events
             EventDAL.Delete(id, CurrentUserId);
             BindEvents();

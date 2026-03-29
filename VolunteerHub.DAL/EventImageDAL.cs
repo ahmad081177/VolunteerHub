@@ -48,6 +48,19 @@ namespace VolunteerHub.DAL
             }
         }
 
+        /// <summary>Deletes one specific image record for an event by its stored path.</summary>
+        public static void DeleteByPath(int eventId, string imagePath)
+        {
+            const string sql = "DELETE FROM EventImages WHERE EventId = ? AND ImagePath = ?";
+            using (var conn = DbHelper.GetConnection())
+            using (var cmd  = new OleDbCommand(sql, conn))
+            {
+                cmd.Parameters.Add("@eid", OleDbType.Integer).Value = eventId;
+                cmd.Parameters.Add("@ip",  OleDbType.VarChar).Value  = imagePath;
+                cmd.ExecuteNonQuery();
+            }
+        }
+
         /// <summary>Returns true if the EventImages table exists (used for graceful fallback on unpatched DBs).</summary>
         public static bool TableExists()
         {

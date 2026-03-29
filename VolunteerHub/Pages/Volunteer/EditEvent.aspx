@@ -67,9 +67,30 @@
                     Rows="3" placeholder="What did you do? (optional)" MaxLength="1000" />
             </div>
 
-            <!-- Image upload (up to 5) -->
+            <!-- Existing photos -->
+            <div class="vh-form-group" id="existingPhotosSection" runat="server">
+                <label class="vh-label"><i class="bi bi-images me-1"></i>Current Photos</label>
+                <asp:HiddenField ID="hfDeleteImageIds" runat="server" Value="" />
+                <div id="existingImgArea" class="d-flex flex-wrap gap-2 mt-1">
+                    <asp:Repeater ID="rptExistingImages" runat="server">
+                        <ItemTemplate>
+                            <div class="position-relative" style="width:72px;">
+                                <img src='<%# ResolveUrl((string)Container.DataItem) %>'
+                                     style="width:72px;height:72px;object-fit:cover;border-radius:8px;border:1px solid #E2E8F0;" />
+                                <button type="button" class="btn-close position-absolute"
+                                    style="top:-6px;right:-6px;background:#EF4444;border-radius:50%;padding:3px;opacity:1;filter:invert(1);"
+                                    title="Remove photo"
+                                    onclick="removeExistingImage(this, '<%# Container.DataItem %>')"></button>
+                            </div>
+                        </ItemTemplate>
+                    </asp:Repeater>
+                </div>
+                <small class="vh-form-hint text-muted">Click ✕ on a photo to mark it for removal when you save.</small>
+            </div>
+
+            <!-- Add new photos -->
             <div class="vh-form-group">
-                <label class="vh-label"><i class="bi bi-images me-1"></i>Photos <span class="text-muted fw-normal" style="font-size:12px;">(optional, up to 5 — JPG/PNG/GIF, max 2 MB each)</span></label>
+                <label class="vh-label"><i class="bi bi-plus-circle me-1"></i>Add More Photos <span class="text-muted fw-normal" style="font-size:12px;">(optional, up to 5 total — JPG/PNG/GIF, max 2 MB each)</span></label>
                 <input type="file" id="fuImages" name="fuImages" accept="image/jpeg,image/png,image/gif"
                        multiple class="vh-form-control" onchange="previewImages(this)" />
                 <div id="imgPreviewArea" class="d-flex flex-wrap gap-2 mt-2"></div>
@@ -112,7 +133,18 @@
     calcHours();
 })();
 
-// ── Image preview ────────────────────────────────────────────────────────────
+// ── Remove existing photo ────────────────────────────────────────────────────
+function removeExistingImage(btn, path) {
+    // Hide the thumbnail immediately
+    btn.parentElement.style.display = 'none';
+    // Accumulate deleted paths in the hidden field (comma-separated)
+    var hf = document.getElementById('<%= hfDeleteImageIds.ClientID %>');
+    var existing = hf.value ? hf.value.split(',') : [];
+    if (existing.indexOf(path) === -1) existing.push(path);
+    hf.value = existing.join(',');
+}
+
+// ── Image preview ─────────────────────────────────────────────────────────────
 function previewImages(input) {
     var area  = document.getElementById('imgPreviewArea');
     var chint = document.getElementById('imgCountHint');

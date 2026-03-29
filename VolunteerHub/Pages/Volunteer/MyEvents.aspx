@@ -68,7 +68,7 @@
                                     <i class="bi bi-pencil"></i>
                                 </a>
                                 <asp:LinkButton CommandName="Delete" CommandArgument='<%# Eval("Id") %>'
-                                    CssClass="btn btn-sm vh-btn-danger"
+                                    CssClass="btn btn-sm vh-btn-danger" CausesValidation="false"
                                     runat="server" OnClientClick="return confirm('Delete this event?')">
                                     <i class="bi bi-trash"></i>
                                 </asp:LinkButton>

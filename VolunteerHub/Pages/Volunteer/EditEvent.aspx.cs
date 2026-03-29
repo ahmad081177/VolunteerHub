@@ -32,6 +32,25 @@ namespace VolunteerHub.Pages.Volunteer
                 // txtHours is readonly/calculated — pre-fill from stored value for display
                 txtHours.Text          = ev.HoursLogged > 0 ? ev.HoursLogged.ToString("0.##") : "";
                 txtNotes.Text          = ev.Notes      ?? "";
+
+                // Load existing photos
+                if (EventImageDAL.TableExists())
+                {
+                    var imgs = EventImageDAL.GetByEvent(id);
+                    if (imgs.Count > 0)
+                    {
+                        rptExistingImages.DataSource = imgs;
+                        rptExistingImages.DataBind();
+                    }
+                    else
+                    {
+                        existingPhotosSection.Visible = false;
+                    }
+                }
+                else
+                {
+                    existingPhotosSection.Visible = false;
+                }
             }
         }
 
@@ -82,12 +101,33 @@ namespace VolunteerHub.Pages.Volunteer
             };
             EventDAL.Update(updated);
 
-            // Save newly uploaded images (appended to any existing ones)
+            // Process photo changes if EventImages table exists
             if (EventImageDAL.TableExists())
             {
+                // 1. Delete any images the user marked for removal
+                string toDelete = hfDeleteImageIds.Value;
+                if (!string.IsNullOrWhiteSpace(toDelete))
+                {
+                    var paths = toDelete.Split(new[] { ',' }, System.StringSplitOptions.RemoveEmptyEntries);
+                    foreach (string imgPath in paths)
+                    {
+                        string trimmed = imgPath.Trim();
+                        EventImageDAL.DeleteByPath(id, trimmed);
+                        // Also delete physical file from disk
+                        try
+                        {
+                            string physical = Server.MapPath(trimmed);
+                            if (System.IO.File.Exists(physical)) System.IO.File.Delete(physical);
+                        }
+                        catch { /* non-fatal */ }
+                    }
+                }
+
+                // 2. Append newly uploaded images (up to 5 total)
+                int existing = EventImageDAL.GetByEvent(id).Count;
                 var files = Request.Files;
                 int saved = 0;
-                for (int i = 0; i < files.Count && saved < 5; i++)
+                for (int i = 0; i < files.Count && (existing + saved) < 5; i++)
                 {
                     var file = files[i];
                     if (file == null || file.ContentLength == 0) continue;
@@ -96,7 +136,7 @@ namespace VolunteerHub.Pages.Volunteer
                         string path = ImageHelper.SaveUpload(file, "EventImages");
                         if (path != null)
                         {
-                            EventImageDAL.Insert(id, path, saved);
+                            EventImageDAL.Insert(id, path, existing + saved);
                             saved++;
                         }
                     }

@@ -74,7 +74,7 @@ namespace VolunteerHub.Pages.Volunteer
             var overtime = EventDAL.GetHoursOverTime(uid);
             var labels   = JsonConvert.SerializeObject(overtime.ConvertAll(x => x.Month));
             var data     = JsonConvert.SerializeObject(overtime.ConvertAll(x => x.Hours));
-            litChartScript.Text = $"<script>VH.lineChart('chartHoursOverTime', {labels}, {data}, 'Hours');</script>";
+            litChartScript.Text = $"<script>VH.lineChart('chartHoursOverTime', {labels}, {data}, '#6366F1');</script>";
         }
 
         /// <summary>Flat view-model for the projects mini-list repeater.</summary>
