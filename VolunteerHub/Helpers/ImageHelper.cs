@@ -49,12 +49,11 @@ namespace VolunteerHub.Helpers
 
             // Magic-byte check: read the first 8 bytes to verify the actual binary format.
             // File extension alone can be faked; magic bytes are embedded in the binary and harder to spoof.
+            // NOTE: do NOT wrap file.InputStream in a using block — we do not own that stream.
+            // Disposing it here would cause file.SaveAs() to write 0 bytes.
             byte[] header = new byte[8];
-            using (var s = file.InputStream)
-            {
-                s.Read(header, 0, 8);
-                s.Seek(0, SeekOrigin.Begin); // reset stream so SaveAs() can re-read from the beginning
-            }
+            file.InputStream.Read(header, 0, 8);
+            file.InputStream.Seek(0, SeekOrigin.Begin); // reset so SaveAs() reads from the start
             bool valid = _signatures.Any(sig => sig.SequenceEqual(header.Take(sig.Length).ToArray()));
             if (!valid)
                 throw new InvalidOperationException("Invalid image format.");
