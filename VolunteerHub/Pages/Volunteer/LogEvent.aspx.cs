@@ -90,10 +90,13 @@ namespace VolunteerHub.Pages.Volunteer
                 return;
             }
 
-            decimal hours;
-            if (!decimal.TryParse(txtHours.Text, out hours) || hours <= 0 || hours > 24)
+            // Hours are derived from start/end times (not manually entered)
+            string startTime = txtStartTime.Text.Trim();
+            string endTime   = txtEndTime.Text.Trim();
+            decimal hours    = CalculateHours(startTime, endTime);
+            if (hours <= 0)
             {
-                litAlert.Text = "<div class=\"vh-alert vh-alert-danger\">Invalid hours value.</div>";
+                litAlert.Text = "<div class=\"vh-alert vh-alert-danger\">End time must be after start time.</div>";
                 return;
             }
 
@@ -102,13 +105,18 @@ namespace VolunteerHub.Pages.Volunteer
                 UserId      = CurrentUserId,
                 ProjectId   = projectId,
                 EventDate   = date,
-                StartTime   = string.IsNullOrWhiteSpace(txtStartTime.Text) ? null : txtStartTime.Text,
-                EndTime     = string.IsNullOrWhiteSpace(txtEndTime.Text)   ? null : txtEndTime.Text,
+                StartTime   = startTime,
+                EndTime     = endTime,
                 HoursLogged = hours,
-                Notes       = string.IsNullOrWhiteSpace(txtNotes.Text)     ? null : txtNotes.Text.Trim(),
+                Notes       = string.IsNullOrWhiteSpace(txtNotes.Text) ? null : txtNotes.Text.Trim(),
                 LoggedAt    = DateTime.UtcNow
             };
             int eventId = EventDAL.Insert(ev);
+
+            // Auto-enroll the volunteer if they haven't formally joined the project yet
+            // (so Admin/ProjectDetail shows all participants, not just those who clicked "Join")
+            if (!VolunteerProjectDAL.IsEnrolled(CurrentUserId, projectId))
+                VolunteerProjectDAL.Enroll(CurrentUserId, projectId);
 
             // Save uploaded images (up to 5) if the EventImages table exists
             if (EventImageDAL.TableExists())
@@ -133,6 +141,21 @@ namespace VolunteerHub.Pages.Volunteer
             }
 
             Response.Redirect("~/Pages/Volunteer/MyEvents.aspx?success=1", true);
+        }
+
+        /// <summary>Calculates decimal hours from two "HH:MM" strings. Returns 0 if invalid or end &lt;= start.</summary>
+        private static decimal CalculateHours(string start, string end)
+        {
+            try
+            {
+                var sp = start.Split(':');
+                var ep = end.Split(':');
+                int startMin = int.Parse(sp[0]) * 60 + int.Parse(sp[1]);
+                int endMin   = int.Parse(ep[0]) * 60 + int.Parse(ep[1]);
+                int diff = endMin - startMin;
+                return diff > 0 ? Math.Round((decimal)diff / 60, 2) : 0m;
+            }
+            catch { return 0m; }
         }
     }
 }

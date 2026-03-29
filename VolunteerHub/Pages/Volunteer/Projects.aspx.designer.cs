@@ -10,6 +10,6 @@ namespace VolunteerHub.Pages.Volunteer
     {
         protected global::System.Web.UI.WebControls.Literal litAlert;
         protected global::System.Web.UI.WebControls.Repeater rptProjects;
-        protected global::System.Web.UI.WebControls.LinkButton btnJoin;
+        protected global::System.Web.UI.WebControls.Panel pnlEmpty;
     }
 }

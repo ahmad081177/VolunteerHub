@@ -39,6 +39,7 @@ namespace VolunteerHub.Pages.Volunteer
 
             rptProjects.DataSource = rows;
             rptProjects.DataBind();
+            pnlEmpty.Visible = rows.Count == 0;
         }
 
         /// <summary>Handles the "Join" LinkButton inside the Repeater.</summary>
@@ -57,6 +58,31 @@ namespace VolunteerHub.Pages.Volunteer
             }
 
             BindProjects(); // refresh grid to update button states
+        }
+
+        /// <summary>Renders truncated description for a project card (max 100 chars).</summary>
+        protected string ProjectDesc(object desc)
+        {
+            string s = desc == null || desc == System.DBNull.Value ? null : desc.ToString();
+            if (string.IsNullOrWhiteSpace(s)) return "No description provided.";
+            return s.Length > 100 ? s.Substring(0, 100) + "…" : s;
+        }
+
+        /// <summary>Renders the hours-required badge HTML, or empty string.</summary>
+        protected string HoursRequiredBadge(object hrs)
+        {
+            if (hrs == null || hrs == System.DBNull.Value) return "";
+            return "<span><i class='bi bi-clock'></i> " + hrs + " hrs required</span>";
+        }
+
+        /// <summary>Renders the enrollment state badge HTML.</summary>
+        protected string EnrollBadge(bool isEnrolled, string status)
+        {
+            if (isEnrolled)
+                return "<span class=\"vh-badge vh-badge-success\"><i class='bi bi-check-circle'></i> Enrolled</span>";
+            if (status == "Ended")
+                return "<span class=\"vh-badge vh-badge-muted\">Project Ended</span>";
+            return "";
         }
 
         /// <summary>

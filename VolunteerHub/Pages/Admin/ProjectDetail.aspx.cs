@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using VolunteerHub.Base;
 using VolunteerHub.DAL;
 using VolunteerHub.Models;
@@ -49,18 +50,36 @@ namespace VolunteerHub.Pages.Admin
             statDaysLeft.InnerText    = p.Status == "Ended" ? "Ended" : daysLeft.ToString();
 
             // --- Build a view model merging VolunteerProject + AppUser + hours ---
+            // Show everyone who has EITHER formally enrolled OR logged hours —
+            // so volunteers who skip joining and log directly are still visible.
+            var enrolledUserIds  = new HashSet<int>(enrollments.ConvertAll(e => e.UserId));
+            var participantIds   = EventDAL.GetDistinctUserIdsByProject(id);
+            // Union: start with enrolled, then add anyone who logged hours but didn't enroll
+            var allUserIds = new List<int>(enrolledUserIds);
+            foreach (var uid in participantIds)
+                if (!enrolledUserIds.Contains(uid)) allUserIds.Add(uid);
+
             var rows = new List<VolunteerProgressRow>();
-            foreach (var vp in enrollments)
+            foreach (var userId in allUserIds)
             {
-                var user = UserDAL.GetById(vp.UserId);
+                var user = UserDAL.GetById(userId);
                 if (user == null) continue;
                 decimal hrs = 0;
-                foreach (var ev in EventDAL.GetByUserAndProject(vp.UserId, id))
+                foreach (var ev in EventDAL.GetByUserAndProject(userId, id))
                     hrs += ev.HoursLogged;
 
                 decimal pct = p.HoursRequired.HasValue && p.HoursRequired > 0
                               ? Math.Min(100, Math.Round(hrs / p.HoursRequired.Value * 100))
                               : 0;
+
+                // EnrolledAt: formal enrolment date if present, otherwise first-event date
+                var enrollment = enrollments.Find(e => e.UserId == userId);
+                DateTime enrolledAt = enrollment != null
+                    ? enrollment.EnrolledAt
+                    : EventDAL.GetByUserAndProject(userId, id)
+                              .ConvertAll(e => e.EventDate)
+                              .OrderBy(d => d)
+                              .FirstOrDefault();
 
                 rows.Add(new VolunteerProgressRow
                 {
@@ -68,7 +87,7 @@ namespace VolunteerHub.Pages.Admin
                     Initials    = user.Initials,
                     Email       = user.Email,
                     HoursLogged = hrs,
-                    EnrolledAt  = vp.EnrolledAt,
+                    EnrolledAt  = enrolledAt,
                     ProgressPct = (int)pct
                 });
             }

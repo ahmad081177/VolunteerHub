@@ -38,30 +38,27 @@
             <div class="row g-3">
                 <div class="col-md-6">
                     <div class="vh-form-group">
-                        <label class="vh-label">Start Time</label>
+                        <label class="vh-label">Start Time <span class="vh-required">*</span></label>
                         <asp:TextBox ID="txtStartTime" runat="server" CssClass="vh-input" TextMode="Time" />
+                        <asp:RequiredFieldValidator runat="server" ControlToValidate="txtStartTime"
+                            CssClass="vh-field-error" ErrorMessage="Start time is required." Display="Dynamic" />
                     </div>
                 </div>
                 <div class="col-md-6">
                     <div class="vh-form-group">
-                        <label class="vh-label">End Time</label>
+                        <label class="vh-label">End Time <span class="vh-required">*</span></label>
                         <asp:TextBox ID="txtEndTime" runat="server" CssClass="vh-input" TextMode="Time" />
+                        <asp:RequiredFieldValidator runat="server" ControlToValidate="txtEndTime"
+                            CssClass="vh-field-error" ErrorMessage="End time is required." Display="Dynamic" />
                     </div>
                 </div>
             </div>
 
             <div class="vh-form-group">
-                <label class="vh-label" id="lblHours">Hours Logged <span class="vh-required">*</span></label>
-                <asp:TextBox ID="txtHours" runat="server" CssClass="vh-input" TextMode="Number"
-                    placeholder="e.g. 2.5" step="0.5" />
-                <small id="hoursHint" class="vh-form-hint" style="display:none;">
-                    <i class="bi bi-calculator"></i> Auto-calculated from start/end times
-                </small>
-                <asp:RequiredFieldValidator runat="server" ControlToValidate="txtHours"
-                    CssClass="vh-field-error" ErrorMessage="Hours are required." Display="Dynamic" />
-                <asp:RangeValidator runat="server" ControlToValidate="txtHours"
-                    MinimumValue="0.1" MaximumValue="24" Type="Double"
-                    CssClass="vh-field-error" ErrorMessage="Enter hours between 0.1 and 24." Display="Dynamic" />
+                <label class="vh-label" id="lblHours">Hours Logged <small class="text-muted fw-normal">(auto-calculated from times)</small></label>
+                <asp:TextBox ID="txtHours" runat="server" CssClass="vh-input" ReadOnly="true"
+                    style="background:#F0FDF4;cursor:not-allowed;" />
+                <small class="vh-form-hint"><i class="bi bi-calculator"></i> Derived from start and end time — not editable.</small>
             </div>
 
             <div class="vh-form-group">
@@ -94,32 +91,17 @@
     var st   = document.getElementById('<%= txtStartTime.ClientID %>');
     var et   = document.getElementById('<%= txtEndTime.ClientID %>');
     var hrs  = document.getElementById('<%= txtHours.ClientID %>');
-    var hint = document.getElementById('hoursHint');
     if (!st || !et || !hrs) return;
 
     function calcHours() {
         var sv = st.value, ev = et.value;
-        if (!sv || !ev) {
-            hrs.removeAttribute('readonly');
-            hrs.style.background = '';
-            hint.style.display = 'none';
-            return;
-        }
+        if (!sv || !ev) { hrs.value = ''; return; }
         var sm = sv.split(':'), em = ev.split(':');
         var startMin = parseInt(sm[0]) * 60 + parseInt(sm[1]);
         var endMin   = parseInt(em[0]) * 60 + parseInt(em[1]);
         var diff = endMin - startMin;
-        if (diff <= 0) {
-            hrs.removeAttribute('readonly');
-            hrs.style.background = '';
-            hint.style.display = 'none';
-            return;
-        }
-        var h = (diff / 60).toFixed(2).replace(/\.00$/, '').replace(/0$/, '');
-        hrs.value = h;
-        hrs.setAttribute('readonly', 'readonly');
-        hrs.style.background = '#F0FDF4';
-        hint.style.display = 'block';
+        if (diff <= 0) { hrs.value = ''; return; }
+        hrs.value = (diff / 60).toFixed(2).replace(/\.00$/, '').replace(/0$/, '');
     }
 
     st.addEventListener('change', calcHours);

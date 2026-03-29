@@ -1,6 +1,7 @@
 using System;
 using VolunteerHub.Base;
 using VolunteerHub.DAL;
+using VolunteerHub.Helpers;
 using VolunteerHub.Models;
 
 namespace VolunteerHub.Pages.Volunteer
@@ -28,7 +29,8 @@ namespace VolunteerHub.Pages.Volunteer
                 txtDate.Text           = ev.EventDate.ToString("yyyy-MM-dd");
                 txtStartTime.Text      = ev.StartTime ?? "";
                 txtEndTime.Text        = ev.EndTime   ?? "";
-                txtHours.Text          = ev.HoursLogged.ToString("0.##");
+                // txtHours is readonly/calculated — pre-fill from stored value for display
+                txtHours.Text          = ev.HoursLogged > 0 ? ev.HoursLogged.ToString("0.##") : "";
                 txtNotes.Text          = ev.Notes      ?? "";
             }
         }
@@ -57,10 +59,13 @@ namespace VolunteerHub.Pages.Volunteer
                 return;
             }
 
-            decimal hours;
-            if (!decimal.TryParse(txtHours.Text, out hours) || hours <= 0 || hours > 24)
+            // Hours are calculated from start/end times (not manually entered)
+            string startTime = txtStartTime.Text.Trim();
+            string endTime   = txtEndTime.Text.Trim();
+            decimal hours    = CalculateHours(startTime, endTime);
+            if (hours <= 0)
             {
-                litAlert.Text = "<div class=\"vh-alert vh-alert-danger\">Invalid hours value.</div>";
+                litAlert.Text = "<div class=\"vh-alert vh-alert-danger\">End time must be after start time.</div>";
                 return;
             }
 
@@ -70,14 +75,52 @@ namespace VolunteerHub.Pages.Volunteer
                 UserId      = CurrentUserId,
                 ProjectId   = original.ProjectId,   // immutable
                 EventDate   = date,
-                StartTime   = string.IsNullOrWhiteSpace(txtStartTime.Text) ? null : txtStartTime.Text,
-                EndTime     = string.IsNullOrWhiteSpace(txtEndTime.Text)   ? null : txtEndTime.Text,
+                StartTime   = startTime,
+                EndTime     = endTime,
                 HoursLogged = hours,
-                Notes       = string.IsNullOrWhiteSpace(txtNotes.Text)     ? null : txtNotes.Text.Trim()
+                Notes       = string.IsNullOrWhiteSpace(txtNotes.Text) ? null : txtNotes.Text.Trim()
             };
             EventDAL.Update(updated);
 
+            // Save newly uploaded images (appended to any existing ones)
+            if (EventImageDAL.TableExists())
+            {
+                var files = Request.Files;
+                int saved = 0;
+                for (int i = 0; i < files.Count && saved < 5; i++)
+                {
+                    var file = files[i];
+                    if (file == null || file.ContentLength == 0) continue;
+                    try
+                    {
+                        string path = ImageHelper.SaveUpload(file, "EventImages");
+                        if (path != null)
+                        {
+                            EventImageDAL.Insert(id, path, saved);
+                            saved++;
+                        }
+                    }
+                    catch { /* skip invalid files silently */ }
+                }
+            }
+
             Response.Redirect("~/Pages/Volunteer/MyEvents.aspx?saved=1", true);
+        }
+
+        /// <summary>Calculates decimal hours from two "HH:MM" strings. Returns 0 if invalid or end &lt;= start.</summary>
+        private static decimal CalculateHours(string start, string end)
+        {
+            try
+            {
+                var sp = start.Split(':');
+                var ep = end.Split(':');
+                int startMin = int.Parse(sp[0]) * 60 + int.Parse(sp[1]);
+                int endMin   = int.Parse(ep[0]) * 60 + int.Parse(ep[1]);
+                int diff = endMin - startMin;
+                return diff > 0 ? Math.Round((decimal)diff / 60, 2) : 0m;
+            }
+            catch { return 0m; }
         }
     }
 }
+

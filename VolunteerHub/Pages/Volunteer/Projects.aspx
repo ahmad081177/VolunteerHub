@@ -23,26 +23,16 @@
                 <div class="vh-project-card">
                     <div class="vh-project-card-header">
                         <span class='<%# "vh-badge " + GetStatusBadgeClass((string)Eval("Status")) %>'><%# Eval("Status") %></span>
-                        <span class="text-muted small"><%# Eval("Location") ?? "" %></span>
+                        <span class="text-muted small"><%# Eval("Location") == null ? "" : Eval("Location") %></span>
                     </div>
                     <h3 class="vh-project-card-title"><%# Eval("Title") %></h3>
-                    <p class="vh-project-card-desc">
-                        <%# !string.IsNullOrEmpty(Eval("Description")?.ToString())
-                            ? (Eval("Description").ToString().Length > 100
-                               ? Eval("Description").ToString().Substring(0, 100) + "…"
-                               : Eval("Description"))
-                            : "No description provided." %>
-                    </p>
+                    <p class="vh-project-card-desc"><%# ProjectDesc(Eval("Description")) %></p>
                     <div class="vh-project-card-meta">
                         <span><i class="bi bi-calendar"></i> <%# ((DateTime)Eval("StartDate")).ToString("MMM dd") %> – <%# ((DateTime)Eval("EndDate")).ToString("MMM dd, yyyy") %></span>
-                        <%# Eval("HoursRequired") != null ? $"<span><i class='bi bi-clock'></i> {Eval(\"HoursRequired\")} hrs required</span>" : "" %>
+                        <%# HoursRequiredBadge(Eval("HoursRequired")) %>
                     </div>
                     <div class="vh-project-card-footer">
-                        <%# (bool)Eval("IsEnrolled")
-                            ? "<span class=\"vh-badge vh-badge-success\"><i class='bi bi-check-circle'></i> Enrolled</span>"
-                            : (string)Eval("Status") == "Ended"
-                              ? "<span class=\"vh-badge vh-badge-muted\">Project Ended</span>"
-                              : "" %>
+                        <%# EnrollBadge((bool)Eval("IsEnrolled"), (string)Eval("Status")) %>
                         <asp:LinkButton ID="btnJoin" runat="server"
                             CommandName="Join"
                             CommandArgument='<%# Eval("Id") %>'
@@ -60,7 +50,13 @@
         </ItemTemplate>
         <FooterTemplate>
             </div>
-            <%# rptProjects.Items.Count == 0 ? "<div class='vh-empty-state'><i class='bi bi-folder2-open'></i><p>No projects available in your workspace yet.</p></div>" : "" %>
         </FooterTemplate>
     </asp:Repeater>
+
+    <asp:Panel ID="pnlEmpty" runat="server" Visible="false">
+        <div class="vh-empty-state">
+            <i class="bi bi-folder2-open vh-empty-icon"></i>
+            <p class="vh-empty-text">No projects available in your workspace yet.</p>
+        </div>
+    </asp:Panel>
 </asp:Content>

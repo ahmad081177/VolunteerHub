@@ -16,6 +16,7 @@ namespace VolunteerHub
             // Ensure upload directories exist
             EnsureDirectory(Server.MapPath("~/Uploads/ProfileImages"));
             EnsureDirectory(Server.MapPath("~/Uploads/WorkspaceLogos"));
+            EnsureDirectory(Server.MapPath("~/Uploads/EventImages"));
 
             // Initialize database tables if not yet created
             DAL.DatabaseInitializer.Initialize();

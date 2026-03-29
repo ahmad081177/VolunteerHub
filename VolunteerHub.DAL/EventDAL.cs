@@ -115,6 +115,21 @@ namespace VolunteerHub.DAL
             }
         }
 
+        /// <summary>Returns distinct UserId values that have logged at least one hour on this project.</summary>
+        public static List<int> GetDistinctUserIdsByProject(int projectId)
+        {
+            const string sql = "SELECT DISTINCT UserId FROM Events WHERE ProjectId = ?";
+            var list = new List<int>();
+            using (var conn = DbHelper.GetConnection())
+            using (var cmd  = new OleDbCommand(sql, conn))
+            {
+                cmd.Parameters.AddWithValue("@p", projectId);
+                using (var r = cmd.ExecuteReader())
+                    while (r.Read()) list.Add(Convert.ToInt32(r["UserId"]));
+            }
+            return list;
+        }
+
         // Returns last 6 months of hours per month for a user (for line chart)
         public static List<(string Month, decimal Hours)> GetHoursOverTime(int userId)
         {
@@ -131,7 +146,7 @@ namespace VolunteerHub.DAL
             for (int i = 0; i < 6; i++)
             {
                 var m = cutoff.AddMonths(i);
-                monthly[m.ToString("MMM yy")] = 0m;
+                monthly[m.ToString("MMM yyyy")] = 0m;
             }
             using (var conn = DbHelper.GetConnection())
             using (var cmd  = new OleDbCommand(sql, conn))
@@ -141,7 +156,7 @@ namespace VolunteerHub.DAL
                 using (var r = cmd.ExecuteReader())
                     while (r.Read())
                     {
-                        var key = Convert.ToDateTime(r["EventDate"]).ToString("MMM yy");
+                        var key = Convert.ToDateTime(r["EventDate"]).ToString("MMM yyyy");
                         if (monthly.ContainsKey(key))
                             monthly[key] += Convert.ToDecimal(r["HoursLogged"]);
                     }

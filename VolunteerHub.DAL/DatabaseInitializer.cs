@@ -24,6 +24,7 @@ namespace VolunteerHub.DAL
                     EnsureProjects(conn);
                     EnsureVolunteerProject(conn);
                     EnsureEvents(conn);
+                    EnsureEventImages(conn);
                     SeedSuperAdmin(conn);
                 }
             }
@@ -155,6 +156,20 @@ namespace VolunteerHub.DAL
                 )");
             Execute(conn, "CREATE INDEX IX_Events_UserId ON Events (UserId)");
             Execute(conn, "CREATE INDEX IX_Events_ProjectId ON Events (ProjectId)");
+        }
+
+        private static void EnsureEventImages(OleDbConnection conn)
+        {
+            if (TableExists(conn, "EventImages")) return;
+            Execute(conn, @"
+                CREATE TABLE EventImages (
+                    Id         COUNTER  CONSTRAINT PK_EventImages PRIMARY KEY,
+                    EventId    LONG     NOT NULL,
+                    ImagePath  TEXT(500) NOT NULL,
+                    SortOrder  LONG     NOT NULL,
+                    UploadedAt DATETIME NOT NULL
+                )");
+            Execute(conn, "CREATE INDEX IX_EventImages_EventId ON EventImages (EventId)");
         }
 
         private static void SeedSuperAdmin(OleDbConnection conn)
