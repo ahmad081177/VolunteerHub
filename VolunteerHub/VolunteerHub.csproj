@@ -106,6 +106,9 @@
   <ItemGroup>
     <Content Include="About.aspx" />
     <Content Include="App_Data\VolunteerHub.accdb" />
+    <Content Include="Uploads\EventImages\.gitkeep" />
+    <Content Include="Uploads\ProfileImages\.gitkeep" />
+    <Content Include="Uploads\WorkspaceLogos\.gitkeep" />
     <Content Include="Contact.aspx" />
     <Content Include="Content\bootstrap-grid.css" />
     <Content Include="Content\bootstrap-grid.min.css" />
