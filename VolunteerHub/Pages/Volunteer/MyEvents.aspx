@@ -51,7 +51,7 @@
                     <asp:BoundField DataField="ProjectTitle" HeaderText="Project" />
                     <asp:BoundField DataField="EventDate"    HeaderText="Date"    DataFormatString="{0:MMM dd, yyyy}" />
                     <asp:TemplateField HeaderText="Time">
-                        <ItemTemplate><%# Eval("DurationDisplay") %></ItemTemplate>
+                        <ItemTemplate><%#: Eval("DurationDisplay") %></ItemTemplate>
                     </asp:TemplateField>
                     <asp:BoundField DataField="HoursLogged"  HeaderText="Hours"   DataFormatString="{0:0.#}" />
                     <asp:BoundField DataField="Notes"        HeaderText="Notes"   NullDisplayText="—" />
